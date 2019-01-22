@@ -10,6 +10,8 @@ import {
     ModalHeader,
     ModalTitle, Radio, Row
 } from "react-bootstrap";
+import {connect} from "react-redux";
+import {showRegistrationWindow} from "../actions/accountActions";
 
 class Registration extends Component {
 
@@ -22,7 +24,7 @@ class Registration extends Component {
                         <ModalTitle>Registration</ModalTitle>
                     </ModalHeader>
                     <ModalBody>
-                        <Row className="account-container">
+                        <Row>
                             <Form className="registration-form"
                                   onSubmit={ e => {
                                       e.preventDefault();
@@ -88,4 +90,19 @@ class Registration extends Component {
     }
 }
 
-export default Registration;
+const mapStateToProps = (state) => {
+    return {
+        showRegistrationWindow: state.accountReducer.showRegistrationWindow,
+        message: state.accountReducer.message
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        handleClose: () => { dispatch(showRegistrationWindow(false)) }
+    }
+}
+
+
+
+export default Registration = connect(mapStateToProps, mapDispatchToProps)(Registration);
