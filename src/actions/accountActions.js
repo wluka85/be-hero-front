@@ -10,7 +10,7 @@ const loginUser = (isLoggedIn, sessionId, redirect) => ({
 
 const userLoginWarning = () => ({
     type: 'USER_NOT_LOGGED_IN',
-    message: 'Wrong login or password!'
+    loginMessage: 'Wrong login or password!'
 });
 
 const logoutUser = (sessionId) => ({
@@ -18,6 +18,11 @@ const logoutUser = (sessionId) => ({
     isLoggedIn: false,
     sessionId: '',
     redirect: ''
+});
+
+export const showRegistrationWindow = (isVisible) => ({
+    type: 'SHOW_REGISTRATION_WINDOW',
+    showRegistrationWindow: isVisible
 });
 
 export const handleLogin = (login, password) => {
