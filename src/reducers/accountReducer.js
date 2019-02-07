@@ -5,7 +5,8 @@ const initialState = {
     isLoggedIn: false,
     redirect: '/',
     role: '',
-    showRegistrationWindow: false
+    showRegistrationWindow: false,
+    user: undefined,
 };
 
 const accountReducer = (state=initialState, action) => {
@@ -13,7 +14,7 @@ const accountReducer = (state=initialState, action) => {
         case 'USER_LOGGED_IN':
             return { ...state, isLoggedIn: action.isLoggedIn, sessionId: action.sessionId, redirect: action.redirect, role: action.role};
 
-        case 'USER_NOT_LOGGED_IN':
+        case 'ERROR_MESSAGE_SHOWN':
             return { ...state, loginMessage: action.loginMessage, role: '' };
 
         case 'USER_LOGGED_OUT':
@@ -21,6 +22,15 @@ const accountReducer = (state=initialState, action) => {
 
         case 'SHOW_REGISTRATION_WINDOW':
             return { ...state, showRegistrationWindow: action.showRegistrationWindow };
+
+        case 'SHOW_REGISTRATION_MESSAGE':
+            return { ...state, registrationMessage: action.registrationMessage };
+
+        case 'USER_SIGNED_IN':
+            return {...state, user: action.user, role: action.role, isLoggedIn: action.isLoggedIn, loginMessage: action.loginMessage };
+
+        case 'REDIRECTION':
+        return { ...state, redirect: action.redirect }
 
         default:
             return state;
