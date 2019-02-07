@@ -11,7 +11,8 @@ import {
     ModalTitle, Radio, Row
 } from "react-bootstrap";
 import {connect} from "react-redux";
-import {showRegistrationWindow} from "../actions/accountActions";
+import {handleRegister, showRegistrationMessage, showRegistrationWindow} from "../actions/accountActions";
+import $ from "jquery";
 
 class Registration extends Component {
 
@@ -32,44 +33,43 @@ class Registration extends Component {
                                   }}>
                                 <Col md={6}>
                                     <ControlLabel>User type:</ControlLabel>
-                                    <FormGroup>
-
-                                        <Radio name="radioGroup" inline>
+                                    <FormGroup id='role-radio-button'>
+                                        <Radio id="role-helper-radio" name="radioGroupRole" value="hero" inline>
                                             Helper
                                         </Radio>
-                                        <Radio name="radioGroup" inline>
-                                            Disabled
+                                        <Radio id="role-needer-radio" name="radioGroupRole" value="needer" inline>
+                                            Needer
                                         </Radio>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Login: </ControlLabel>
-                                        <FormControl id="form-login" type="text" placeholder="Enter login" required/>
+                                        <FormControl id="form-registration-login" type="text" placeholder="Enter login" required/>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Password: </ControlLabel>
-                                        <FormControl id="form-password" type="password" placeholder="Enter password" required/>
+                                        <FormControl id="form-registration-password" type="password" placeholder="Enter password" required/>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Confirm password: </ControlLabel>
-                                        <FormControl id="form-password" type="password" placeholder="Enter password" required/>
+                                        <FormControl id="form-confirm-password" type="password" placeholder="Enter password" required/>
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
                                     <FormGroup>
                                         <ControlLabel>Name: </ControlLabel>
-                                        <FormControl id="form-name" type="text" placeholder="Enter name" required/>
+                                        <FormControl id="form-registration-name" type="text" placeholder="Enter name" required/>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Surname: </ControlLabel>
-                                        <FormControl id="form-surname" type="text" placeholder="Enter surname"/>
+                                        <FormControl id="form-registration-surname" type="text" placeholder="Enter surname"/>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Address: </ControlLabel>
-                                        <FormControl id="form-address" type="text" placeholder="Enter address"/>
+                                        <FormControl id="form-registration-address" type="text" placeholder="Enter address"/>
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Description: </ControlLabel>
-                                        <FormControl id="form-description" type="text" placeholder="Enter description"/>
+                                        <FormControl id="form-registration-description" type="text" placeholder="Enter description"/>
                                     </FormGroup>
                                 </Col>
                                 <Col md={12}>
@@ -93,13 +93,35 @@ class Registration extends Component {
 const mapStateToProps = (state) => {
     return {
         showRegistrationWindow: state.accountReducer.showRegistrationWindow,
-        message: state.accountReducer.message
+        message: state.accountReducer.registrationMessage
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleClose: () => { dispatch(showRegistrationWindow(false)) }
+        handleClose: () => { dispatch(showRegistrationWindow(false)) },
+        onSubmit: () => {
+                let choosenRole = document.querySelector('input[name="radioGroupRole"]:checked');
+                if (!choosenRole) {
+                    dispatch(showRegistrationMessage('You should choose role'));
+                } else {
+                    let password = document.getElementById('form-registration-password').value;
+                    let confirmPassword = document.getElementById('form-confirm-password').value;
+
+                    if (password === confirmPassword) {
+                        let role = choosenRole.value;
+                        let login = document.getElementById('form-registration-login').value;
+                        let name = document.getElementById('form-registration-name').value;
+                        let surname = document.getElementById('form-registration-surname').value;
+                        let address = document.getElementById('form-registration-address').value;
+                        let description = document.getElementById('form-registration-description').value;
+                        dispatch(handleRegister(role, login, password, name, surname, address, description));
+
+                    } else {
+                        dispatch(showRegistrationMessage('Wrong password'));
+                    }
+                }
+        }
     }
 }
 
