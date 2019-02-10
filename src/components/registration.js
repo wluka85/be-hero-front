@@ -5,14 +5,12 @@ import {
     FormControl,
     FormGroup, Modal,
     ModalBody,
-    ModalDialog,
     ModalFooter,
     ModalHeader,
     ModalTitle, Radio, Row
 } from "react-bootstrap";
 import {connect} from "react-redux";
 import {handleRegister, showRegistrationMessage, showRegistrationWindow} from "../actions/accountActions";
-import $ from "jquery";
 
 class Registration extends Component {
 
