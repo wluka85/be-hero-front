@@ -6,7 +6,7 @@ const initialState = {
     redirect: '/',
     role: '',
     showRegistrationWindow: false,
-    user: undefined,
+    user: undefined
 };
 
 const accountReducer = (state=initialState, action) => {
