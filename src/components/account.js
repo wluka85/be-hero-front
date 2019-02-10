@@ -4,13 +4,23 @@ import {FormControl} from "react-bootstrap";
 // import {handleLogin} from "../actions/accountActions";
 import {connect} from "react-redux";
 import $ from "jquery";
-import {handleLogin, showRegistrationWindow} from "../actions/accountActions";
+import {handleLogin, showRegistrationWindow, handleAutoSignIn} from "../actions/accountActions";
+import Registration from "./registration";
+import { Redirect } from 'react-router-dom';
 
 class Account extends Component {
+    componentDidMount() {
+        const { handleAutoSignIn } = this.props;
+        window.addEventListener('load', handleAutoSignIn);
+    }
 
     render() {
-        const { onSubmit, message, handleRegister } = this.props;
+        const { onSubmit, message, handleRegister, isLoggedIn, role } = this.props;
 
+        if (isLoggedIn) {
+            return (<Redirect to={ role } />)
+        }
+        
         return (
             <React.Fragment>
             <Navbar fixedTop={true} fluid={true}>
@@ -43,6 +53,7 @@ class Account extends Component {
                     </Form>
                 </Col>
             </Row>
+            <Registration/>
             </React.Fragment>
         );
     }
@@ -50,7 +61,9 @@ class Account extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        message: state.accountReducer.loginMessage
+        message: state.accountReducer.loginMessage,
+        isLoggedIn: state.accountReducer.isLoggedIn,
+        role: state.accountReducer.role
     }
 };
 
@@ -63,7 +76,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(handleLogin(login, password));
         },
 
-        handleRegister: () => {dispatch(showRegistrationWindow(true))}
+        handleRegister: () => {
+            dispatch(showRegistrationWindow(true))
+        },
+        handleAutoSignIn: () => dispatch(handleAutoSignIn())
     }
 };
 
