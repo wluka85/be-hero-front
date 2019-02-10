@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Modal, ModalBody, ModalDialog, ModalFooter, ModalHeader, ModalTitle} from "react-bootstrap";
-import $ from "jquery";
-import {handleLogin, showRegistrationWindow} from "../actions/accountActions";
+import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap";
 import {connect} from "react-redux";
 import {handleCloseActionAlertMessage} from "../actions/messageAlertActions";
 
