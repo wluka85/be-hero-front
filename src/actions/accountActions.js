@@ -1,27 +1,26 @@
 import {loginQuery, registerQuery} from "./apiQueries";
-import {applyMiddleware as dispatch} from "redux";
 import {handleDisplayAlertMessage} from "./messageAlertActions";
 import {Hero} from "../model/hero";
 import {Needer} from "../model/needer";
 
-const loginUser = (isLoggedIn, sessionId, redirect) => ({
-    type: 'USER_LOGGED_IN',
-    isLoggedIn: isLoggedIn,
-    sessionId: sessionId,
-    redirect: redirect
-});
+// const loginUser = (isLoggedIn, sessionId, redirect) => ({
+//     type: 'USER_LOGGED_IN',
+//     isLoggedIn: isLoggedIn,
+//     sessionId: sessionId,
+//     redirect: redirect
+// });
 
 const sendErrorMessage = (message) => ({
     type: 'ERROR_MESSAGE_SHOWN',
     loginMessage: message
 });
 
-const logoutUser = (sessionId) => ({
-    type: 'USER_LOGGED_OUT',
-    isLoggedIn: false,
-    sessionId: '',
-    redirect: ''
-});
+// const logoutUser = (sessionId) => ({
+//     type: 'USER_LOGGED_OUT',
+//     isLoggedIn: false,
+//     sessionId: '',
+//     redirect: ''
+// });
 
 const handleUserSignedIn = (user, role) => ({
     type: 'USER_SIGNED_IN',
@@ -31,10 +30,10 @@ const handleUserSignedIn = (user, role) => ({
     loginMessage: ''
 });
 
-const handleRedirect = (redirect) => ({
-    type: 'USER_LOGGED_OUT',
-    redirect: redirect
-});
+// const handleRedirect = (redirect) => ({
+//     type: 'USER_LOGGED_OUT',
+//     redirect: redirect
+// });
 
 export const showRegistrationMessage = (registrationMessage) => ({
     type: 'SHOW_REGISTRATION_MESSAGE',
@@ -46,13 +45,13 @@ export const showRegistrationWindow = (isVisible) => ({
     showRegistrationWindow: isVisible
 });
 
-export const handleLogin = (login, password) => {
+export const handleLogin = (email, password) => {
     return dispatch => {
         fetch(loginQuery, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify({
-                login: login,
+                email: email,
                 password: password
             })
         })
@@ -68,15 +67,14 @@ export const handleLogin = (login, password) => {
             })
             .then(data => {
                 let user;
-                if (data.role === 'hero') {
-                    user = new Hero(data.name, data.surname, data.description, data.level, data._id);
-
+                if (data.user.role === 'hero') {
+                    user = new Hero(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user.level, data.user._id);
                 } else {
-                    user = new Needer(data.name, data.surname, data.description, data._id);
+                    user = new Needer(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user._id);
                 }
                 localStorage.setItem('sessionId', data.sessionId);
-                dispatch(handleUserSignedIn(user, data.role));
-                dispatch(handleRedirect('logged-in'));
+                localStorage.setItem('accessToken', data.token);
+                dispatch(handleUserSignedIn(user, data.user.role));
 
             })
             .catch(error => console.log(error));
@@ -99,10 +97,31 @@ export const handleRegister = (role, login, password, name, surname, address, de
                 })
             })
                 .then(res => {
-                    console.log(res)
                     dispatch(handleDisplayAlertMessage('You have successfully created your account.'));
                     dispatch(showRegistrationWindow(false));
                 })
             // .catch(error => dispatch(fetchBodiesFailure('Error: Mistake in query', error)));
         }
+};
+
+export const handleAutoSignIn = () => {
+    let accessToken = localStorage.getItem('accessToken');
+    console.log(accessToken)
+    return dispatch => {
+        fetch(loginQuery,  {
+            method: 'GET',
+            headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                let user;
+                if (data.user.role === 'hero') {
+                    user = new Hero(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user.level, data.user._id);
+                } else {
+                    user = new Needer(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user._id);
+                }
+                localStorage.setItem('sessionId', data.sessionId);
+                dispatch(handleUserSignedIn(user, data.user.role));
+            });
+    }
 }
