@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Button, Col, ControlLabel, Form, FormGroup, Nav, Navbar, NavItem, PageHeader, Row} from 'react-bootstrap';
 import {FormControl} from "react-bootstrap";
-// import {handleLogin} from "../actions/accountActions";
 import {connect} from "react-redux";
 import $ from "jquery";
 import {handleLogin, showRegistrationWindow, handleAutoSignIn} from "../actions/accountActions";
