@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
-import {ListGroup, ListGroupItem} from 'react-bootstrap';
-import {connect} from "react-redux";
+import { NavItem, Nav } from 'react-bootstrap';
+import { connect } from "react-redux";
+import { handleLogoutUser } from '../actions/accountActions'
+import { handleSidebarClose } from '../actions/sidebarActions';
 
 class SidebarContent extends Component {
 
-    render() {
+    getUserProfileItem() {
         const { role, userName, userLevel } = this.props;
+        let level;
+        role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
+        return (
+            <React.Fragment>
+                Signed in as <b>{ userName }</b>
+                <br></br>
+                {level}
+            </React.Fragment>
+        )
+    }
 
-        if (role === 'hero') {
-            return (
-                <React.Fragment>
-                    <div style={{ padding: '10px', fontSize: 20 }} >Signed in as { userName }
-                            <div style={{ fontWeight: 'bold' }}>Level: { userLevel }</div></div>
-                    <ListGroup>
-                        <ListGroupItem>Logout</ListGroupItem>
-                        <ListGroupItem>item</ListGroupItem>
-                        <ListGroupItem>item</ListGroupItem>
-                    </ListGroup>
-                </React.Fragment>
-            );
-        } else {
-            return (<div></div>)
-        }
+    render() {
+        const { handleLogout } = this.props;
+
+        return (
+            <React.Fragment>
+                <Nav defaultActiveKey="/home" className="flex-column">
+                    <NavItem disabled> { this.getUserProfileItem() } </NavItem>
+                    <hr style={{ margin: '4px' }}></hr>
+                    <NavItem onClick={ handleLogout }>Logout</NavItem>
+                    <NavItem>item</NavItem>
+                    <NavItem>item</NavItem>
+                </Nav>
+            </React.Fragment>
+        );
     }
 }
 
@@ -36,7 +47,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleClose: () => {  },
+        handleLogout: () => { 
+            dispatch(handleLogoutUser());
+            dispatch(handleSidebarClose());
+        },
     }
 };
 
