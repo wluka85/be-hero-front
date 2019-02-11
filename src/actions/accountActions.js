@@ -15,12 +15,14 @@ const sendErrorMessage = (message) => ({
     loginMessage: message
 });
 
-// const logoutUser = (sessionId) => ({
-//     type: 'USER_LOGGED_OUT',
-//     isLoggedIn: false,
-//     sessionId: '',
-//     redirect: ''
-// });
+export const handleLogoutUser = (sessionId) => ({
+    type: 'USER_LOGGED_OUT',
+    isLoggedIn: false,
+    sessionId: '',
+    user: null,
+    role: '',
+    redirect: ''
+});
 
 const handleUserSignedIn = (user, role) => ({
     type: 'USER_SIGNED_IN',
