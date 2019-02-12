@@ -108,7 +108,6 @@ export const handleRegister = (role, login, password, name, surname, address, de
 
 export const handleAutoSignIn = () => {
     let accessToken = localStorage.getItem('accessToken');
-    console.log(accessToken)
     return dispatch => {
         fetch(loginQuery,  {
             method: 'GET',
