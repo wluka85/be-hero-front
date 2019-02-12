@@ -15,7 +15,7 @@ class SidebarContainer extends Component {
         children=""
         open={sidebarOpen}
         onSetOpen={handleClose}
-        styles={{ sidebar: { background: "white", maxWidth: 270, width: '30%' } }}
+        styles={{ sidebar: { background: "white", maxWidth: 270 } }}
       >
       </Sidebar>
     );
@@ -23,7 +23,6 @@ class SidebarContainer extends Component {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state.sidebarReducer.sidebarOpen)
   return {
       sidebarOpen: state.sidebarReducer.sidebarOpen,
   }
