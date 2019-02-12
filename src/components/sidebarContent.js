@@ -3,8 +3,14 @@ import { NavItem, Nav } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { handleLogoutUser } from '../actions/accountActions'
 import { handleSidebarClose } from '../actions/sidebarActions';
+import { fetchHeroSelfCases } from '../actions/heroActions';
 
 class SidebarContent extends Component {
+
+    componentDidMount() {
+        const { role, handleFetchHeroCases, handleFetchNeederCases } = this.props;
+        role === 'hero' ? handleFetchHeroCases() : handleFetchNeederCases()
+    }
 
     getUserProfileItem() {
         const { role, userName, userLevel } = this.props;
@@ -15,6 +21,22 @@ class SidebarContent extends Component {
                 Signed in as <b>{ userName }</b>
                 <br></br>
                 {level}
+                <hr style={{ margin: '0px', marginTop: '5px' }}></hr>
+            </React.Fragment>
+        )
+    }
+
+    getHeroCases() {
+        const { heroActiveCases } = this.props;
+
+        return (
+            <React.Fragment>
+                <NavItem disabled>Your active cases:</NavItem>
+                {
+                    heroActiveCases.map((element, i) => {
+                        return (<NavItem key={i}><i>{element.description}</i></NavItem>)
+                })
+            }
             </React.Fragment>
         )
     }
@@ -24,12 +46,10 @@ class SidebarContent extends Component {
 
         return (
             <React.Fragment>
-                <Nav defaultActiveKey="/home" className="flex-column">
+                <Nav className="flex-column">
                     <NavItem disabled> { this.getUserProfileItem() } </NavItem>
-                    <hr style={{ margin: '4px' }}></hr>
                     <NavItem onClick={ handleLogout }>Logout</NavItem>
-                    <NavItem>item</NavItem>
-                    <NavItem>item</NavItem>
+                    {this.getHeroCases()}
                 </Nav>
             </React.Fragment>
         );
@@ -37,11 +57,19 @@ class SidebarContent extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { name, surname } =state.accountReducer.user;
+    const { name, surname } = state.accountReducer.user;
+    let userLevel = 1;
+    let heroActiveCases = [];
+    let role = state.accountReducer.role;
+    if (role === 'hero') {
+        userLevel = state.accountReducer.user.level;
+        heroActiveCases = state.heroCasesReducer.heroSelfActiveCases;
+    }
     return {
-        role: state.accountReducer.role,
+        role: role,
         userName: name + ' ' + surname,
-        userLevel: state.accountReducer.user.level
+        userLevel: userLevel,
+        heroActiveCases: heroActiveCases
     }
 };
 
@@ -51,6 +79,12 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(handleLogoutUser());
             dispatch(handleSidebarClose());
         },
+        handleFetchHeroCases: () => {
+            dispatch(fetchHeroSelfCases());
+        },
+        handleFetchNeederCases: () => {
+
+        }
     }
 };
 
