@@ -62,7 +62,7 @@ class Registration extends Component {
                                         <FormControl id="form-registration-surname" type="text" placeholder="Enter surname"/>
                                     </FormGroup>
                                     <FormGroup>
-                                        <ControlLabel>Address: </ControlLabel>
+                                        <ControlLabel>Email: </ControlLabel>
                                         <FormControl id="form-registration-address" type="text" placeholder="Enter address"/>
                                     </FormGroup>
                                     <FormGroup>
@@ -111,9 +111,9 @@ const mapDispatchToProps = (dispatch) => {
                         let login = document.getElementById('form-registration-login').value;
                         let name = document.getElementById('form-registration-name').value;
                         let surname = document.getElementById('form-registration-surname').value;
-                        let address = document.getElementById('form-registration-address').value;
+                        let email = document.getElementById('form-registration-address').value;
                         let description = document.getElementById('form-registration-description').value;
-                        dispatch(handleRegister(role, login, password, name, surname, address, description));
+                        dispatch(handleRegister(role, login, email, password, name, surname, description));
 
                     } else {
                         dispatch(showRegistrationMessage('Wrong password'));
