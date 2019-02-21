@@ -1,5 +1,5 @@
 export const handleChangeSidebarOpen = () => ({
-    type: 'SIDEBAR_CHANGED_OPEN'
+    type: 'SIDEBAR_OPEN_CLOSE'
 });
 
 export const handleSidebarClose = () => ({
