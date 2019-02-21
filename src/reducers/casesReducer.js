@@ -1,7 +1,8 @@
 const initialState = ({
     activeCases: [],
     freeCases: [],
-    users: []
+    users: [],
+    chosenCase: null
 });
 
 const casesReducer = (state=initialState, action) => {
@@ -11,6 +12,9 @@ const casesReducer = (state=initialState, action) => {
 
         case 'USER_CONNECTED':
             return { ...state, users: action.users, freeCases: action.freeCases }
+
+        case 'CASE_CREATED': 
+          return {...state, freeCases: action.freeCases}
 
         default:
             return state;
