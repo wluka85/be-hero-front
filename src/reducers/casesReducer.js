@@ -2,7 +2,8 @@ const initialState = ({
     activeCases: [],
     freeCases: [],
     users: [],
-    chosenCase: null
+    chosenCase: null,
+    openDialog: false
 });
 
 const casesReducer = (state=initialState, action) => {
@@ -15,6 +16,12 @@ const casesReducer = (state=initialState, action) => {
 
         case 'CASE_CREATED': 
           return {...state, freeCases: action.freeCases}
+
+        case 'OPEN_NEW_CASE_DIALOG':
+          return {...state, openDialog: true}
+
+        case 'CLOSE_NEW_CASE_DIALOG':
+          return {...state, openDialog: false}
 
         default:
             return state;
