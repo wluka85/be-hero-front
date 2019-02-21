@@ -9,7 +9,9 @@ import { withStyles } from '@material-ui/core/styles';
 import SidebarContent from './sidebarContent';
 import { AppHeader } from './appHeader';
 import {handleChangeSidebarOpen} from "../actions/sidebarActions";
-import CasesTable from './casesTable'
+import CasesTable from './casesTable';
+import Chat from './chat';
+
 
 const drawerWidth = 300;
 
@@ -55,10 +57,17 @@ class MainContainer extends React.Component {
   };
 
   render() {
-    const { isLoggedIn, classes, theme, sidebarOpen, handleOpenClose } = this.props;
+    const { isLoggedIn, classes, theme, sidebarOpen, handleOpenClose, chosenCase } = this.props;
+    let mainContent;
     
     if (!isLoggedIn) {
       return (<Redirect to='/' />)
+    }
+
+    if (chosenCase) {
+      mainContent = <Chat/>;
+    } else {
+      mainContent = <CasesTable/>;
     }
 
     const drawer = (<SidebarContent/>);
@@ -95,22 +104,17 @@ class MainContainer extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        <CasesTable/>
+          {mainContent}
       </div>
     );
   }
 }
 
-MainContainer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  container: PropTypes.object,
-  theme: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = (state) => {
     return {
       isLoggedIn: state.accountReducer.isLoggedIn,
-      sidebarOpen: state.sidebarReducer.sidebarOpen
+      sidebarOpen: state.sidebarReducer.sidebarOpen,
+      chosenCase: state.casesReducer.chosenCase
     }
   }
 
