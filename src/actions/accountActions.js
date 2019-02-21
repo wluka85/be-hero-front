@@ -1,7 +1,6 @@
 import {loginQuery, registerQuery} from "./apiQueries";
 import {handleDisplayAlertMessage} from "./messageAlertActions";
-import {Hero} from "../model/hero";
-import {Needer} from "../model/needer";
+import { sendUserConnectedMessage } from "./socketActions";
 
 // const loginUser = (isLoggedIn, sessionId, redirect) => ({
 //     type: 'USER_LOGGED_IN',
@@ -15,7 +14,7 @@ const sendErrorMessage = (message) => ({
     loginMessage: message
 });
 
-export const handleLogoutUser = (sessionId) => ({
+export const handleLogoutUser = () => ({
     type: 'USER_LOGGED_OUT',
     isLoggedIn: false,
     sessionId: '',
@@ -68,22 +67,15 @@ export const handleLogin = (email, password) => {
 
             })
             .then(data => {
-                let user;
-                if (data.user.role === 'hero') {
-                    user = new Hero(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user.level, data.user._id);
-                } else {
-                    user = new Needer(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user._id);
-                }
-                localStorage.setItem('sessionId', data.sessionId);
                 localStorage.setItem('accessToken', data.token);
-                dispatch(handleUserSignedIn(user, data.user.role));
+                handleSignedIn(data, dispatch);
 
             })
             .catch(error => console.log(error));
     }
 };
 
-export const handleRegister = (role, login, password, name, surname, address, description) => {
+export const handleRegister = (role, login, email, password, name, surname, description) => {
         return dispatch => {
             fetch(registerQuery, {
                 method: 'POST',
@@ -91,10 +83,10 @@ export const handleRegister = (role, login, password, name, surname, address, de
                 body: JSON.stringify({
                     userType: role,
                     login: login,
+                    email: email,
                     password: password,
                     name: name,
                     surname: surname,
-                    address: address,
                     description: description
                 })
             })
@@ -115,14 +107,24 @@ export const handleAutoSignIn = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                let user;
-                if (data.user.role === 'hero') {
-                    user = new Hero(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user.level, data.user._id);
-                } else {
-                    user = new Needer(data.user.name, data.user.surname, data.user.description, data.user.sessionId, data.user._id);
-                }
-                localStorage.setItem('sessionId', data.sessionId);
-                dispatch(handleUserSignedIn(user, data.user.role));
+                handleSignedIn(data, dispatch);
             });
     }
+}
+
+const handleSignedIn = (data, dispatch) => {
+    let user;
+    user = {
+        name: data.user.name,
+        surname: data.user.surname,
+        login: data.user.login,
+        email: data.user.email,
+        description: data.user.description,
+        level: data.user.level,
+        id: data.user._id,
+        role: data.user.role,
+    }
+    localStorage.setItem('sessionId', data.sessionId);
+    dispatch(handleUserSignedIn(user, data.user.role));
+    dispatch(sendUserConnectedMessage(user));
 }
