@@ -1,42 +1,79 @@
 import React, { Component } from 'react';
-import { NavItem, Nav } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { handleLogoutUser } from '../actions/accountActions'
-import { handleSidebarClose } from '../actions/sidebarActions';
 import { fetchHeroSelfCases } from '../actions/heroActions';
+import Divider from '@material-ui/core/Divider';
+import PersonIcon from '@material-ui/icons/Person';
+import StarRateIcon from '@material-ui/icons/StarRate';
+import ExitIcon from '@material-ui/icons/ExitToApp';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import TouchIcon from '@material-ui/icons/TouchApp';
+import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles';
+
+const drawerWidth = 240;
+
+const styles = theme => ({
+    drawer: {
+      [theme.breakpoints.up('sm')]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing.unit * 3,
+    }
+  });
 
 class SidebarContent extends Component {
-
-    componentDidMount() {
-        const { role, handleFetchHeroCases, handleFetchNeederCases } = this.props;
-        role === 'hero' ? handleFetchHeroCases() : handleFetchNeederCases()
-    }
 
     getUserProfileItem() {
         const { role, userName, userLevel } = this.props;
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
+        let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
+
         return (
             <React.Fragment>
-                Signed in as <b>{ userName }</b>
-                <br></br>
-                {level}
-                <hr style={{ margin: '0px', marginTop: '5px' }}></hr>
+                <ListItem>
+                    <ListItemIcon><PersonIcon /></ListItemIcon>
+                    <ListItemText primary={ signedInAs } />
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon><StarRateIcon/></ListItemIcon>
+                    <ListItemText primary={ level } />
+                </ListItem>
             </React.Fragment>
         )
     }
 
-    getHeroCases() {
-        const { heroActiveCases } = this.props;
+    getSelfCases() {
+        const { activeCases } = this.props;
 
         return (
             <React.Fragment>
-                <NavItem disabled>Your active cases:</NavItem>
-                {
-                    heroActiveCases.map((element, i) => {
-                        return (<NavItem key={i}><i>{element.description}</i></NavItem>)
-                })
-            }
+                <Divider/>
+                <List>
+                    <ListItem>
+                        <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
+                    </ListItem>
+                    {
+                        activeCases.map((element, i) => {
+                            return (
+                            <ListItem button key={i}>
+                                <ListItemIcon><TouchIcon /></ListItemIcon>
+                                <ListItemText primary={ element.description } />
+                            </ListItem>
+                            )
+                    })
+                }
+                </List>
             </React.Fragment>
         )
     }
@@ -46,38 +83,37 @@ class SidebarContent extends Component {
 
         return (
             <React.Fragment>
-                <Nav className="flex-column">
-                    <NavItem disabled> { this.getUserProfileItem() } </NavItem>
-                    <NavItem onClick={ handleLogout }>Logout</NavItem>
-                    {this.getHeroCases()}
-                </Nav>
+                <List>
+                    { this.getUserProfileItem() }
+                </List>
+                   { this.getSelfCases() } 
+                <Divider />
+                <List>
+                    <ListItem button key='logout' onClick={handleLogout}>
+                        <ListItemIcon><ExitIcon /></ListItemIcon>
+                        <ListItemText primary='Sign Out' />
+                    </ListItem>
+                </List>
             </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    const { name, surname } = state.accountReducer.user;
-    let userLevel = 1;
-    let heroActiveCases = [];
-    let role = state.accountReducer.role;
-    if (role === 'hero') {
-        userLevel = state.accountReducer.user.level;
-        heroActiveCases = state.heroCasesReducer.heroSelfActiveCases;
-    }
+    const { name, surname, level, role } = state.accountReducer.user;
     return {
         role: role,
         userName: name + ' ' + surname,
-        userLevel: userLevel,
-        heroActiveCases: heroActiveCases
+        userLevel: level,
+        activeCases: state.casesReducer.activeCases
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleLogout: () => { 
+        handleLogout: () => {
+            localStorage.setItem('accessToken', '');
             dispatch(handleLogoutUser());
-            dispatch(handleSidebarClose());
         },
         handleFetchHeroCases: () => {
             dispatch(fetchHeroSelfCases());
@@ -88,4 +124,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default SidebarContent = connect(mapStateToProps, mapDispatchToProps)(SidebarContent);
+export default SidebarContent = connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SidebarContent));
