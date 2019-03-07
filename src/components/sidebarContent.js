@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { handleLogoutUser } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
+import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
 import PersonIcon from '@material-ui/icons/Person';
 import StarRateIcon from '@material-ui/icons/StarRate';
@@ -54,7 +55,7 @@ class SidebarContent extends Component {
     }
 
     getSelfCases() {
-        const { activeCases } = this.props;
+        const { activeCases, handleSetCurrentActiveCase } = this.props;
 
         return (
             <React.Fragment>
@@ -66,7 +67,7 @@ class SidebarContent extends Component {
                     {
                         activeCases.map((element, i) => {
                             return (
-                            <ListItem button key={i}>
+                            <ListItem button key={i} onClick={ () => { handleSetCurrentActiveCase(element._id)} }>
                                 <ListItemIcon><TouchIcon /></ListItemIcon>
                                 <ListItemText primary={ element.description } />
                             </ListItem>
@@ -120,6 +121,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         handleFetchNeederCases: () => {
 
+        },
+        handleSetCurrentActiveCase: (id) => {
+            dispatch(setActiveCaseCurrentChat(id))
         }
     }
 };
