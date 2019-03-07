@@ -1,4 +1,6 @@
 const initialState = ({
+    currentChatCase: {},
+    chatDialog: [],
     activeCases: [],
     freeCases: [],
     users: []
@@ -12,6 +14,11 @@ const casesReducer = (state=initialState, action) => {
         case 'USER_CONNECTED':
             return { ...state, users: action.users, freeCases: action.freeCases }
 
+        case 'CURRENT_CHAT_CASE':
+            return { ...state, currentChatCase: action.currentChatCase, chatDialog: action.currentChatCase.dialog }
+
+        case 'MESSAGE_ADDED_TO_CHAT':
+            return { ...state, chatDialog: state.chatDialog.concat(action.message) }
         default:
             return state;
     }
