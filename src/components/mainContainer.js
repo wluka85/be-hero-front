@@ -9,13 +9,16 @@ import { withStyles } from '@material-ui/core/styles';
 import SidebarContent from './sidebarContent';
 import { AppHeader } from './appHeader';
 import {handleChangeSidebarOpen} from "../actions/sidebarActions";
-import CasesTable from './casesTable'
+// import CasesTable from './casesTable'
+import Chat from './chat';
 
 const drawerWidth = 300;
 
 const styles = theme => ({
   root: {
     display: 'flex',
+    // flexDirection: 'column',
+    // marginLeft: 300
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -95,7 +98,8 @@ class MainContainer extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        <CasesTable/>
+        <Chat/>
+        {/* <CasesTable/> */}
       </div>
     );
   }
