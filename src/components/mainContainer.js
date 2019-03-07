@@ -1,16 +1,15 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
+import {CssBaseline, Drawer, Hidden } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import SidebarContent from './sidebarContent';
 import { AppHeader } from './appHeader';
-import {handleChangeSidebarOpen} from "../actions/sidebarActions";
 // import CasesTable from './casesTable'
 import Chat from './chat';
+import {handleChangeSidebarOpen, handleSidebarClose} from "../actions/sidebarActions";
+import CasesTable from './casesTable';
+// import CaseCreate from './caseCreate';
 
 const drawerWidth = 300;
 
@@ -53,15 +52,29 @@ class MainContainer extends React.Component {
     mobileOpen: false,
   };
 
-  handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-  };
+  componentDidMount() {    
+    window.addEventListener("resize", this.resize);
+    this.resize();
+  }
+  
+  resize = () => {
+    const { sidebarOpen, handleSidebarClose } = this.props;
+    let currentHideSideBar = (window.innerWidth <= 600);
+    if (currentHideSideBar !== sidebarOpen) { handleSidebarClose() }
+  }
 
   render() {
-    const { isLoggedIn, classes, theme, sidebarOpen, handleOpenClose } = this.props;
+    const { isLoggedIn, classes, theme, sidebarOpen, handleSidebarOpenClose, chosenCase, openDialog, handleDialogOpen } = this.props;
+    let mainContent;
     
     if (!isLoggedIn) {
       return (<Redirect to='/' />)
+    }
+
+    if (chosenCase) {
+      mainContent = <Chat/>;
+    } else {
+      mainContent = <CasesTable/>;
     }
 
     const drawer = (<SidebarContent/>);
@@ -78,7 +91,7 @@ class MainContainer extends React.Component {
               variant="temporary"
               anchor={theme.direction === 'rtl' ? 'right' : 'left'}
               open={sidebarOpen}
-              onClose={handleOpenClose}
+              onClose={handleSidebarOpenClose}
               classes={{
                 paper: classes.drawerPaper,
               }}
@@ -100,27 +113,28 @@ class MainContainer extends React.Component {
         </nav>
         <Chat/>
         {/* <CasesTable/> */}
+          {mainContent}
+
       </div>
     );
   }
 }
 
-MainContainer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  container: PropTypes.object,
-  theme: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = (state) => {
     return {
       isLoggedIn: state.accountReducer.isLoggedIn,
-      sidebarOpen: state.sidebarReducer.sidebarOpen
+      sidebarOpen: state.sidebarReducer.sidebarOpen,
+      chosenCase: state.casesReducer.chosenCase,
+      openDialog: state.casesReducer.openDialog,
+      mobileOpen: state.sidebarReducer.mobileOpen
     }
   }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      handleOpenClose: () => { dispatch(handleChangeSidebarOpen()) },
+      handleSidebarOpenClose: () => { dispatch(handleChangeSidebarOpen()) },
+      handleSidebarClose: () => { dispatch(handleSidebarClose())},
+      handleDialogOpen: () => { dispatch({type: 'OPEN_NEW_CASE_DIALOG'}) }
    }
 };
   
