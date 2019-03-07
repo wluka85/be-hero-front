@@ -107,7 +107,9 @@ export const handleAutoSignIn = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                handleSignedIn(data, dispatch);
+                if (data.message !== "Auth failed 4"){
+                    handleSignedIn(data, dispatch);
+                }
             });
     }
 }
