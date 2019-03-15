@@ -71,6 +71,17 @@ class MainContainer extends React.Component {
 
     } 
   }
+
+  componentDidUpdate(prevProps) {
+    const { currentActiveCase, history, role, handleSetCurrentActiveCase } = this.props;
+    const chatId = this.props.match.params.id;
+    if (prevProps.currentActiveCase._id !== chatId && this.props.match.path.includes('chat')) {
+      handleSetCurrentActiveCase(chatId);
+
+    } else if (prevProps.currentActiveCase._id !== currentActiveCase._id) {
+      history.push('/' + role + '/chat/' + currentActiveCase._id);
+    }
+  }
   
   resize = () => {
     const { sidebarOpen, handleSidebarClose } = this.props;
