@@ -9,6 +9,9 @@ import { AppHeader } from './appHeader';
 import Chat from './chat';
 import {handleChangeSidebarOpen, handleSidebarClose} from "../actions/sidebarActions";
 import CasesTable from './casesTable';
+import { handleAutoSignIn } from "../actions/accountActions";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { setActiveCaseCurrentChat } from '../actions/casesActions';
 // import CaseCreate from './caseCreate';
 
 const drawerWidth = 300;
@@ -18,6 +21,13 @@ const styles = theme => ({
     display: 'flex',
     // flexDirection: 'column',
     // marginLeft: 300
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -52,9 +62,14 @@ class MainContainer extends React.Component {
     mobileOpen: false,
   };
 
-  componentDidMount() {    
+  componentDidMount() {
+    const { isLoggedIn, handleAutoSignIn, handleSetCurrentActiveCase } = this.props;  
     window.addEventListener("resize", this.resize);
     this.resize();
+    if (!isLoggedIn) {
+      handleAutoSignIn();
+
+    } 
   }
   
   resize = () => {
@@ -64,18 +79,25 @@ class MainContainer extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, classes, theme, sidebarOpen, handleSidebarOpenClose, chosenCase, openDialog, handleDialogOpen } = this.props;
-    let mainContent;
-    
-    if (!isLoggedIn) {
+    const { isLoggedIn, waitingForLoggedIn, containerContent, classes, theme, sidebarOpen, 
+      handleSidebarOpenClose } = this.props;
+    if (waitingForLoggedIn) {
+      return (
+        <div className={classes.spinner}>
+          <CircularProgress className={classes.progress} />
+        </div>
+      );
+    } else if (!isLoggedIn) {
       return (<Redirect to='/' />)
     }
-
-    if (chosenCase) {
-      mainContent = <Chat/>;
+    let mainContent = (<div></div>);
+    
+    if (this.props.match.path.includes('chat')) {
+      mainContent = (<Chat/>);
     } else {
-      mainContent = <CasesTable/>;
+      mainContent = (<CasesTable/>);
     }
+    
 
     const drawer = (<SidebarContent/>);
     const appBar = (<AppHeader/>);
@@ -111,22 +133,24 @@ class MainContainer extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        <Chat/>
-        {/* <CasesTable/> */}
-          {mainContent}
-
+          { mainContent }
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
+    let role ='';
+    state.accountReducer.user ? role = state.accountReducer.user.role : role = '';
     return {
       isLoggedIn: state.accountReducer.isLoggedIn,
+      waitingForLoggedIn: state.accountReducer.waitingForLoggedIn,
       sidebarOpen: state.sidebarReducer.sidebarOpen,
       chosenCase: state.casesReducer.chosenCase,
       openDialog: state.casesReducer.openDialog,
-      mobileOpen: state.sidebarReducer.mobileOpen
+      mobileOpen: state.sidebarReducer.mobileOpen,
+      currentActiveCase: state.casesReducer.currentChatCase,
+      role: role
     }
   }
 
@@ -134,7 +158,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
       handleSidebarOpenClose: () => { dispatch(handleChangeSidebarOpen()) },
       handleSidebarClose: () => { dispatch(handleSidebarClose())},
-      handleDialogOpen: () => { dispatch({type: 'OPEN_NEW_CASE_DIALOG'}) }
+      handleDialogOpen: () => { dispatch({type: 'OPEN_NEW_CASE_DIALOG'}) },
+      handleAutoSignIn: () => dispatch(handleAutoSignIn()),
+      handleSetCurrentActiveCase: (id) => { dispatch(setActiveCaseCurrentChat(id)) }
    }
 };
   

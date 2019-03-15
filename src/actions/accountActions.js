@@ -20,7 +20,8 @@ export const handleLogoutUser = () => ({
     sessionId: '',
     user: null,
     role: '',
-    redirect: ''
+    redirect: '',
+    waitingForLoggedIn: false
 });
 
 const handleUserSignedIn = (user, role) => ({
@@ -28,13 +29,16 @@ const handleUserSignedIn = (user, role) => ({
     isLoggedIn: true,
     user: user,
     role: role,
-    loginMessage: ''
+    loginMessage: '',
+    waitingForLoggedIn: false
 });
 
-// const handleRedirect = (redirect) => ({
-//     type: 'USER_LOGGED_OUT',
-//     redirect: redirect
-// });
+const handleRedirect = (redirect) => ({
+    type: 'USER_LOGGED_OUT',
+    // redirect: redirect,
+    isLoggedIn: false,
+    waitingForLoggedIn: false
+});
 
 export const showRegistrationMessage = (registrationMessage) => ({
     type: 'SHOW_REGISTRATION_MESSAGE',
@@ -109,6 +113,8 @@ export const handleAutoSignIn = () => {
             .then((data) => {
                 if (data.message !== "Auth failed 4"){
                     handleSignedIn(data, dispatch);
+                } else {
+                    dispatch(handleRedirect(''));
                 }
             });
     }
