@@ -64,11 +64,15 @@ class Chat extends React.Component {
     messageInput: ''
   }
 
+  componentDidUpdate() {
+    this.refs.chatContent.scrollIntoView({block: "end"});
+  }
+
   render() {
     const { classes, currentActiveCase, chatDialog, sendMessage } = this.props;
     
     const chatContent = (
-      <React.Fragment>
+      <div ref='chatContent' >
         { chatDialog.map((element, key) => {
           return (
             <Card className={classes.card} key={key}>
@@ -87,7 +91,7 @@ class Chat extends React.Component {
             )
           })
         }
-      </React.Fragment>
+      </div>
     );
 
     return (
