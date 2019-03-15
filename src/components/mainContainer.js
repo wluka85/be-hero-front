@@ -5,14 +5,12 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import SidebarContent from './sidebarContent';
 import { AppHeader } from './appHeader';
-// import CasesTable from './casesTable'
 import Chat from './chat';
 import {handleChangeSidebarOpen, handleSidebarClose} from "../actions/sidebarActions";
 import CasesTable from './casesTable';
 import { handleAutoSignIn } from "../actions/accountActions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
-// import CaseCreate from './caseCreate';
 
 const drawerWidth = 300;
 
@@ -63,7 +61,7 @@ class MainContainer extends React.Component {
   };
 
   componentDidMount() {
-    const { isLoggedIn, handleAutoSignIn, handleSetCurrentActiveCase } = this.props;  
+    const { isLoggedIn, handleAutoSignIn } = this.props;  
     window.addEventListener("resize", this.resize);
     this.resize();
     if (!isLoggedIn) {
@@ -90,7 +88,7 @@ class MainContainer extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, waitingForLoggedIn, containerContent, classes, theme, sidebarOpen, 
+    const { isLoggedIn, waitingForLoggedIn, classes, theme, sidebarOpen, 
       handleSidebarOpenClose } = this.props;
     if (waitingForLoggedIn) {
       return (
