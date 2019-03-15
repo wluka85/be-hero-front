@@ -116,15 +116,9 @@ const mapDispatchToProps = (dispatch) => {
             localStorage.setItem('accessToken', '');
             dispatch(handleLogoutUser());
         },
-        handleFetchHeroCases: () => {
-            dispatch(fetchHeroSelfCases());
-        },
-        handleFetchNeederCases: () => {
-
-        },
-        handleSetCurrentActiveCase: (id) => {
-            dispatch(setActiveCaseCurrentChat(id))
-        }
+        handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
+        handleFetchNeederCases: () => { },
+        handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id))
     }
 };
 
