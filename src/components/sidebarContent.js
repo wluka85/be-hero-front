@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { Redirect } from 'react-router'
 import { handleLogoutUser } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
+import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
 import PersonIcon from '@material-ui/icons/Person';
 import StarRateIcon from '@material-ui/icons/StarRate';
@@ -12,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import TouchIcon from '@material-ui/icons/TouchApp';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
+import AddBoxIcon from '@material-ui/icons/AddCircle';
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 
 const drawerWidth = 240;
 
@@ -34,11 +38,11 @@ const styles = theme => ({
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, userName, userLevel } = this.props;
+        const { role, userName, userLevel, history } = this.props;
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
-
+        let createNewCase = 'Create new case'
         return (
             <React.Fragment>
                 <ListItem>
@@ -49,12 +53,21 @@ class SidebarContent extends Component {
                     <ListItemIcon><StarRateIcon/></ListItemIcon>
                     <ListItemText primary={ level } />
                 </ListItem>
+                <Divider />
+                <ListItem onClick={() => {history.push('/', role)}}>
+                    <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
+                    <ListItemText primary='Free cases' />
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon><AddBoxIcon/></ListItemIcon>
+                    <ListItemText primary={ createNewCase } />
+                </ListItem>
             </React.Fragment>
         )
     }
 
     getSelfCases() {
-        const { activeCases } = this.props;
+        const { activeCases, handleSetCurrentActiveCase } = this.props;
 
         return (
             <React.Fragment>
@@ -66,7 +79,7 @@ class SidebarContent extends Component {
                     {
                         activeCases.map((element, i) => {
                             return (
-                            <ListItem button key={i}>
+                            <ListItem button key={i} onClick={ () => { handleSetCurrentActiveCase(element._id)} }>
                                 <ListItemIcon><TouchIcon /></ListItemIcon>
                                 <ListItemText primary={ element.description } />
                             </ListItem>
@@ -115,12 +128,9 @@ const mapDispatchToProps = (dispatch) => {
             localStorage.setItem('accessToken', '');
             dispatch(handleLogoutUser());
         },
-        handleFetchHeroCases: () => {
-            dispatch(fetchHeroSelfCases());
-        },
-        handleFetchNeederCases: () => {
-
-        }
+        handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
+        handleFetchNeederCases: () => { },
+        handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id))
     }
 };
 
