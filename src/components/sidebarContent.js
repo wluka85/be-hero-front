@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { Redirect } from 'react-router'
 import { handleLogoutUser } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
@@ -13,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import TouchIcon from '@material-ui/icons/TouchApp';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
+import AddBoxIcon from '@material-ui/icons/AddCircle';
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 
 const drawerWidth = 240;
 
@@ -35,11 +38,11 @@ const styles = theme => ({
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, userName, userLevel } = this.props;
+        const { role, userName, userLevel, history } = this.props;
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
-
+        let createNewCase = 'Create new case'
         return (
             <React.Fragment>
                 <ListItem>
@@ -49,6 +52,15 @@ class SidebarContent extends Component {
                 <ListItem>
                     <ListItemIcon><StarRateIcon/></ListItemIcon>
                     <ListItemText primary={ level } />
+                </ListItem>
+                <Divider />
+                <ListItem onClick={() => {history.push('/', role)}}>
+                    <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
+                    <ListItemText primary='Free cases' />
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon><AddBoxIcon/></ListItemIcon>
+                    <ListItemText primary={ createNewCase } />
                 </ListItem>
             </React.Fragment>
         )
