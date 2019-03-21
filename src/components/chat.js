@@ -11,16 +11,33 @@ import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { addMessageToChat } from '../actions/chatActions';
 import { sendChatMessage } from '../actions/socketActions';
+import moment from 'moment';
 
 const styles = theme => ({
   chat: {
-    width: '100%'
+    width: '100%',
   },
   card: {
     width: '100%',
     marginTop: 70,
     height: '18vh',
     minHeight: 110
+  },
+  firstPersonCard: {
+    backgroundColor: '#008cd9',
+    marginTop: 10,
+  },
+  firstPersonDiv: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  secondPersonCard: {
+    backgroundColor: '#f1efef',
+    marginTop: 10,
+  },
+  secondPersonDiv: {
+    display: 'flex',
+    flexDirection: 'row-reverse'
   },
   chatPaper: {
     ...theme.mixins.gutters(),
@@ -34,6 +51,22 @@ const styles = theme => ({
   title: {
     fontSize: 14,
   },
+  firstPersonTitle: {
+    fontSize: 14,
+    color: 'white'
+  },
+  firstPersonContent: {
+    color: 'white'
+  },
+  firstPersonPosDate: {
+    color: 'white',
+    textAlign: 'right',
+    fontSize: 10,
+  },
+  secondPersonPosDate: {
+    textAlign: 'right',
+    fontSize: 10,
+  },
   description: {
     textAlign: 'center'
   },
@@ -41,7 +74,7 @@ const styles = theme => ({
     marginBottom: 12,
   },
   posDate: {
-    textAlign: 'right',    
+    textAlign: 'right',  
   },
   messageTyper: {
     marginTop: 5,
@@ -56,6 +89,12 @@ const styles = theme => ({
   iconButton: {
     padding: 10,
   },
+  cardContent: {
+    padding: '10px',
+    "&:last-child": {
+      paddingBottom: '10px'
+    }
+  }
 });
 
 class Chat extends React.Component {
@@ -69,25 +108,29 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { classes, currentActiveCase, chatDialog, sendMessage } = this.props;
-    
+    const { classes, currentActiveCase, chatDialog, sendMessage, user } = this.props;
     const chatContent = (
       <div ref='chatContent' >
         { chatDialog.map((element, key) => {
           return (
-            <Card className={classes.card} key={key}>
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  { element.author }
-                </Typography>
-                <Typography component="p">
-                  { element.contents }
-                </Typography>
-                <Typography className={classes.posDate} color="textSecondary">
-                  { element.timeStamp }
-                </Typography>
-              </CardContent>
-            </Card>
+            <div className={user.name === element.author ? classes.firstPersonDiv : classes.secondPersonDiv}>
+              <Card
+                className={classes.card} 
+                className={ user.name === element.author ? classes.firstPersonCard : classes.secondPersonCard } 
+                key={key}>
+                <CardContent className={classes.cardContent}>
+                  <Typography className={user.name === element.author ? classes.firstPersonTitle : classes.secondPersonTitle} color="textSecondary" gutterBottom>
+                    { element.author }
+                  </Typography>
+                  <Typography className={user.name === element.author ? classes.firstPersonContent : classes.secondPersonContent} component="p">
+                    { element.contents }
+                  </Typography>
+                  <Typography className={user.name === element.author ? classes.firstPersonPosDate : classes.secondPersonPosDate} color="textSecondary">
+                    { moment(element.timeStamp).format('lll') }
+                  </Typography>
+                </CardContent>
+              </Card>
+            </div>
             )
           })
         }
@@ -143,14 +186,11 @@ class Chat extends React.Component {
   
 }
 
-Chat.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = (state) => {
     return {
         currentActiveCase: state.casesReducer.currentChatCase,
-        chatDialog: state.casesReducer.chatDialog
+        chatDialog: state.casesReducer.chatDialog,
+        user: state.accountReducer.user
     }
 }
 
