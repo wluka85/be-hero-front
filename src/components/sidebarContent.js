@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Redirect } from 'react-router'
 import { handleLogoutUser } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
@@ -16,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import AddBoxIcon from '@material-ui/icons/AddCircle';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import CaseCreate from './caseCreate';
 
 const drawerWidth = 240;
 
@@ -38,7 +38,7 @@ const styles = theme => ({
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, userName, userLevel, history } = this.props;
+        const { role, userName, userLevel, history, handleShowCreateCaseDialog } = this.props;
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
@@ -54,11 +54,11 @@ class SidebarContent extends Component {
                     <ListItemText primary={ level } />
                 </ListItem>
                 <Divider />
-                <ListItem onClick={() => {history.push('/', role)}}>
+                <ListItem button onClick={() => {history.push('/', role)}}>
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
                 </ListItem>
-                <ListItem>
+                <ListItem button onClick={handleShowCreateCaseDialog}>
                     <ListItemIcon><AddBoxIcon/></ListItemIcon>
                     <ListItemText primary={ createNewCase } />
                 </ListItem>
@@ -107,6 +107,7 @@ class SidebarContent extends Component {
                         <ListItemText primary='Sign Out' />
                     </ListItem>
                 </List>
+                <CaseCreate/>
             </React.Fragment>
         );
     }
@@ -130,7 +131,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
         handleFetchNeederCases: () => { },
-        handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id))
+        handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id)),
+        handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'})
     }
 };
 
