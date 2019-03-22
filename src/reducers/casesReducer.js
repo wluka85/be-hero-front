@@ -31,6 +31,9 @@ const casesReducer = (state=initialState, action) => {
         case 'CLOSE_NEW_CASE_DIALOG':
           return {...state, openDialog: false}
 
+        case 'MESSAGE_RECIEVED':
+            return { ...state, chatDialog: state.chatDialog.concat(action.message) }
+
         default:
             return state;
     }
