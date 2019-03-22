@@ -9,10 +9,14 @@ const chatMessageSent = (message) => ({
 });
 
 export const sendChatMessage = (message) => (dispatch, getState) => {
+    console.log('state of message: ', getState())
+    const role = getState().accountReducer.user.role;
+    const currentChatCase = getState().casesReducer.currentChatCase;
+    const reciever = role === 'needer' ? currentChatCase.heroId : currentChatCase.neederId;
     const content = {
         contents: message, 
         // sender: sender,
-        // reciever: reciever,
+        reciever: reciever,
         author: getState().accountReducer.user.name,
         caseId: getState().casesReducer.currentChatCase._id
     }
