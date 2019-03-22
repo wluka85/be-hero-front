@@ -50,11 +50,11 @@ export const showRegistrationWindow = (isVisible) => ({
     showRegistrationWindow: isVisible
 });
 
-export const handleSignedOut = (user) => {
+export const handleSignedOut = () => {
   return dispatch => {
     localStorage.setItem('accessToken', '');
     dispatch(handleLogoutUser());
-    dispatch(sendUserDisconnectedMessage(user));
+    dispatch(sendUserDisconnectedMessage());
   }
 }
 

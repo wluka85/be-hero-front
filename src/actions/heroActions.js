@@ -1,4 +1,4 @@
-import { heroSelfCasesQuery, getCasesQuery } from './apiQueries'
+import { getCasesQuery } from './apiQueries'
 
 const setHeroSelfCases = (cases) => ({
     type: 'HERO_CASES_LOADED',

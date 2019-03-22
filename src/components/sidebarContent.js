@@ -92,7 +92,7 @@ class SidebarContent extends Component {
     }
 
     render() {
-        const { handleLogout, user } = this.props;
+        const { handleLogout } = this.props;
 
         return (
             <React.Fragment>
@@ -102,7 +102,7 @@ class SidebarContent extends Component {
                    { this.getSelfCases() } 
                 <Divider />
                 <List>
-                    <ListItem button key='logout' onClick={() => handleLogout(user)}>
+                    <ListItem button key='logout' onClick={handleLogout}>
                         <ListItemIcon><ExitIcon /></ListItemIcon>
                         <ListItemText primary='Sign Out' />
                     </ListItem>
@@ -126,8 +126,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleLogout: (user) => {
-            dispatch(handleSignedOut(user));
+        handleLogout: () => {
+            dispatch(handleSignedOut());
         },
         handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
         handleFetchNeederCases: () => { },

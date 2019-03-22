@@ -34,6 +34,9 @@ const casesReducer = (state=initialState, action) => {
         case 'MESSAGE_RECIEVED':
             return { ...state, chatDialog: state.chatDialog.concat(action.message) }
 
+        case 'USER_DISCONNECTED': 
+          return {...state, users: action.users}
+
         default:
             return state;
     }
