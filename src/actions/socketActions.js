@@ -3,7 +3,12 @@ export const sendUserConnectedMessage = (user) => ({
     user: user
 });
 
-const chatMessageSent = (message) => ({
+export const sendUserDisconnectedMessage = (user) => ({
+  type: 'server/user-disconnected',
+  user: user
+})
+
+export const chatMessageSent = (message) => ({
     type: 'server/message-sent',
     message: message
 });

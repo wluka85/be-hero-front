@@ -1,6 +1,6 @@
 import {loginQuery, registerQuery} from "./apiQueries";
 import {handleDisplayAlertMessage} from "./messageAlertActions";
-import { sendUserConnectedMessage } from "./socketActions";
+import { sendUserConnectedMessage, sendUserDisconnectedMessage } from "./socketActions";
 
 // const loginUser = (isLoggedIn, sessionId, redirect) => ({
 //     type: 'USER_LOGGED_IN',
@@ -49,6 +49,14 @@ export const showRegistrationWindow = (isVisible) => ({
     type: 'SHOW_REGISTRATION_WINDOW',
     showRegistrationWindow: isVisible
 });
+
+export const handleSignedOut = (user) => {
+  return dispatch => {
+    localStorage.setItem('accessToken', '');
+    dispatch(handleLogoutUser());
+    dispatch(sendUserDisconnectedMessage(user));
+  }
+}
 
 export const handleLogin = (email, password) => {
     return dispatch => {

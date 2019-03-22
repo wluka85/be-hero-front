@@ -113,7 +113,7 @@ class Chat extends React.Component {
       <div ref='chatContent' >
         { chatDialog.map((element, key) => {
           return (
-            <div className={user.name === element.author ? classes.firstPersonDiv : classes.secondPersonDiv}>
+            <div className={user.name === element.author ? classes.firstPersonDiv : classes.secondPersonDiv} key={key}>
               <Card
                 className={classes.card} 
                 className={ user.name === element.author ? classes.firstPersonCard : classes.secondPersonCard } 
