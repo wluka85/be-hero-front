@@ -25,6 +25,8 @@ class App extends Component {
             <Route exact path="/needer" component={MainContainer} />
             <Route exact path="/hero/chat/:id" component={MainContainer} />
             <Route exact path="/needer/chat/:id" component={MainContainer} />
+            <Route exact path="/hero/case-description/:id" component={MainContainer} />
+            <Route exact path="/needer/case-description/:id" component={MainContainer} />
           </div>
         </Router>
       </MuiThemeProvider>
