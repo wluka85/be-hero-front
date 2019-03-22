@@ -1,14 +1,15 @@
-import { heroSelfCasesQuery } from './apiQueries'
+import { heroSelfCasesQuery, getCasesQuery } from './apiQueries'
 
 const setHeroSelfCases = (cases) => ({
     type: 'HERO_CASES_LOADED',
     heroSelfActiveCases: cases
 });
 
-export const fetchHeroSelfCases = () => {
+export const fetchHeroSelfCases = () => (dispatch, getState) =>  {
+    let role = getState().accountReducer.user.role;
     let accessToken = localStorage.getItem('accessToken');
         return dispatch => {
-            fetch(heroSelfCasesQuery, {
+            fetch(getCasesQuery(role), {
                 method: 'GET',
                 headers: {'Accept': 'application/json', 
                     'Content-Type': 'application/json',
