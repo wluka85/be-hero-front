@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { connect } from "react-redux";
+import { fetchChoosenFreeCase } from '../actions/casesActions'
 
 const styles = theme => ({
   root: {
@@ -23,7 +24,8 @@ const styles = theme => ({
 class CasesTable extends React.Component {
 
 render() {
-    const { classes, freeCases } = this.props;
+    const { classes, freeCases, history, role, handleFetchChoosenFreeCase } = this.props;
+    console.log(role)
     return (
         <Paper className={classes.root}>
           <Table className={classes.table}>
@@ -36,7 +38,10 @@ render() {
             <TableBody>
               {freeCases.map((freeCase, key) => (
                 <TableRow key={key}>
-                  <TableCell component="th" scope="row">{freeCase.description}</TableCell>
+                  <TableCell component="th" scope="row" onClick={() => {
+                      history.push('/' +  role + '/case-description/' + freeCase._id);
+                      handleFetchChoosenFreeCase(freeCase._id)
+                    }}>{freeCase.description}</TableCell>
                   <TableCell align="right">{freeCase.login}</TableCell>
                 </TableRow>
               ))}
@@ -54,14 +59,17 @@ CasesTable.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  let role ='';
+    state.accountReducer.user ? role = state.accountReducer.user.role : role = '';
     return {
-        freeCases: state.casesReducer.freeCases
+        freeCases: state.casesReducer.freeCases,
+        role: role
     }
   };
   
   const mapDispatchToProps = (dispatch) => {
     return {
-
+      handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))}
     }
   };
   

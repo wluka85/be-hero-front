@@ -11,6 +11,7 @@ import CasesTable from './casesTable';
 import { handleAutoSignIn } from "../actions/accountActions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
+import CaseDescription from './caseDescription';
 
 const drawerWidth = 300;
 
@@ -103,8 +104,11 @@ class MainContainer extends React.Component {
     
     if (this.props.match.path.includes('chat')) {
       mainContent = (<Chat/>);
-    } else {
-      mainContent = (<CasesTable/>);
+    } else if (this.props.match.path.includes('case-description')) {
+      mainContent = (<CaseDescription/>);
+    } 
+    else {
+      mainContent = (<CasesTable history={this.props.history}/>);
     }
     
 
