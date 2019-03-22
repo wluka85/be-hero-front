@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { handleLogoutUser } from '../actions/accountActions'
+import { handleSignedOut } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
@@ -92,7 +92,7 @@ class SidebarContent extends Component {
     }
 
     render() {
-        const { handleLogout } = this.props;
+        const { handleLogout, user } = this.props;
 
         return (
             <React.Fragment>
@@ -102,7 +102,7 @@ class SidebarContent extends Component {
                    { this.getSelfCases() } 
                 <Divider />
                 <List>
-                    <ListItem button key='logout' onClick={handleLogout}>
+                    <ListItem button key='logout' onClick={() => handleLogout(user)}>
                         <ListItemIcon><ExitIcon /></ListItemIcon>
                         <ListItemText primary='Sign Out' />
                     </ListItem>
@@ -119,15 +119,15 @@ const mapStateToProps = (state) => {
         role: role,
         userName: name + ' ' + surname,
         userLevel: level,
-        activeCases: state.casesReducer.activeCases
+        activeCases: state.casesReducer.activeCases,
+        user: state.accountReducer.user
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleLogout: () => {
-            localStorage.setItem('accessToken', '');
-            dispatch(handleLogoutUser());
+        handleLogout: (user) => {
+            dispatch(handleSignedOut(user));
         },
         handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
         handleFetchNeederCases: () => { },
