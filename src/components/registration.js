@@ -80,7 +80,7 @@ class Registration extends Component {
                         </Row>
                     </ModalBody>
                     <ModalFooter>
-                        <Button outline onClick={ handleClose }>Close</Button>
+                        <Button outline='true' onClick={ handleClose }>Close</Button>
                     </ModalFooter>
                 </Modal>
             </div>

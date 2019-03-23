@@ -102,9 +102,13 @@ export const handleRegister = (role, login, email, password, name, surname, desc
                     description: description
                 })
             })
+            .then(res => res.json())
                 .then(res => {
+                  // localStorage.setItem('accessToken', res.token);
                     dispatch(handleDisplayAlertMessage('You have successfully created your account.'));
                     dispatch(showRegistrationWindow(false));
+                    localStorage.setItem('accessToken', res.token);
+                    handleSignedIn(res, dispatch);
                 })
             // .catch(error => dispatch(fetchBodiesFailure('Error: Mistake in query', error)));
         }
