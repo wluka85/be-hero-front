@@ -42,7 +42,12 @@ class SidebarContent extends Component {
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
-        let createNewCase = 'Create new case'
+        const buttonCreateCase = (
+            <ListItem button onClick={handleShowCreateCaseDialog}>
+                <ListItemIcon><AddBoxIcon/></ListItemIcon>
+                <ListItemText primary='Create new case' />
+            </ListItem>
+        )
         return (
             <React.Fragment>
                 <ListItem>
@@ -58,10 +63,7 @@ class SidebarContent extends Component {
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
                 </ListItem>
-                <ListItem button onClick={handleShowCreateCaseDialog}>
-                    <ListItemIcon><AddBoxIcon/></ListItemIcon>
-                    <ListItemText primary={ createNewCase } />
-                </ListItem>
+                { role === 'needer' ? buttonCreateCase : (<React.Fragment></React.Fragment>) }
             </React.Fragment>
         )
     }
