@@ -67,7 +67,7 @@ class SidebarContent extends Component {
     }
 
     getSelfCases() {
-        const { activeCases, handleSetCurrentActiveCase } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
 
         return (
             <React.Fragment>
@@ -79,7 +79,10 @@ class SidebarContent extends Component {
                     {
                         activeCases.map((element, i) => {
                             return (
-                            <ListItem button key={i} onClick={ () => { handleSetCurrentActiveCase(element._id)} }>
+                            <ListItem button key={i} onClick={ () => {
+                                    history.push('/' + role + '/chat/' + element._id);
+                                    handleSetCurrentActiveCase(element._id);
+                                }}>
                                 <ListItemIcon><TouchIcon /></ListItemIcon>
                                 <ListItemText primary={ element.description } />
                             </ListItem>
