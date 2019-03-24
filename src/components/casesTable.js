@@ -19,6 +19,12 @@ const styles = theme => ({
   table: {
     // minWidth: 700,
   },
+  casesDescription: {
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#008cd9 !important'
+    }
+  }
 });
 
 class CasesTable extends React.Component {
@@ -38,7 +44,7 @@ render() {
             <TableBody>
               {freeCases.map((freeCase, key) => (
                 <TableRow key={key}>
-                  <TableCell component="th" scope="row" onClick={() => {
+                  <TableCell className={classes.casesDescription} component="th" scope="row" onClick={() => {
                       history.push('/' +  role + '/case-description/' + freeCase._id);
                       handleFetchChoosenFreeCase(freeCase._id)
                     }}>{freeCase.description}</TableCell>
