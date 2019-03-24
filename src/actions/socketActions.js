@@ -13,6 +13,11 @@ export const chatMessageSent = (message) => ({
     message: message
 });
 
+export const createdCaseSent = (message) => ({
+    type: 'server/case-created',
+    message: message
+});
+
 export const sendChatMessage = (message) => (dispatch, getState) => {
     console.log('state of message: ', getState())
     const role = getState().accountReducer.user.role;
@@ -26,4 +31,14 @@ export const sendChatMessage = (message) => (dispatch, getState) => {
         caseId: getState().casesReducer.currentChatCase._id
     }
     dispatch(chatMessageSent(content))
+};
+
+export const sendCreatedCase = (description) => (dispatch, getState) => {
+    const user = getState().accountReducer.user;
+    const content = {
+        description: description, 
+        user: user
+    }
+    console.log('content ', content)
+    dispatch(createdCaseSent(content))
 };

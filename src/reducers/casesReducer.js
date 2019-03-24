@@ -4,7 +4,7 @@ const initialState = ({
     activeCases: [],
     freeCases: [],
     users: [],
-    chosenCase: null,
+    chosenCase: {},
     openDialog: false
 });
 
@@ -36,6 +36,10 @@ const casesReducer = (state=initialState, action) => {
 
         case 'USER_DISCONNECTED': 
           return {...state, users: action.users}
+
+        case 'CURRENT_CASE_DESCRIPTION':
+        console.log('chosen case: ', action.chosenCase)
+          return {...state, chosenCase: action.chosenCase}
 
         default:
             return state;

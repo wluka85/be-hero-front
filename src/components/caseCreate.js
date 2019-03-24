@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
 import {connect} from 'react-redux';
+import $ from "jquery";
+import { sendCreatedCase } from '../actions/socketActions'
 
 class CaseCreate extends Component {
 
   render() {
-    const {openDialog, handleClose} = this.props;
+    const {openDialog, handleClose, handleCreateCase } = this.props;
 
     return (
       <Dialog
@@ -21,7 +23,7 @@ class CaseCreate extends Component {
             <TextField
               autoFocus
               margin="dense"
-              id="name"
+              id="case-description"
               label="Description"
               type="text"
               fullWidth
@@ -31,7 +33,10 @@ class CaseCreate extends Component {
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={() => {
+              handleCreateCase();
+              handleClose();
+            }} color="primary">
               Submit
             </Button>
           </DialogActions>
@@ -48,7 +53,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleClose: () => { dispatch({type: 'CLOSE_NEW_CASE_DIALOG'})}
+    handleClose: () => { dispatch({type: 'CLOSE_NEW_CASE_DIALOG'})},
+    handleCreateCase: () => {
+      const description = $('#case-description').val();
+      console.log(description);
+      dispatch(sendCreatedCase(description))
+    }
   }
 }
 

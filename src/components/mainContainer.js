@@ -102,7 +102,7 @@ class MainContainer extends React.Component {
     if (this.props.match.path.includes('chat')) {
       mainContent = (<Chat/>);
     } else if (this.props.match.path.includes('case-description')) {
-      mainContent = (<CaseDescription/>);
+      mainContent = (<CaseDescription history= {this.props.history}/>);
     } 
     else {
       mainContent = (<CasesTable history={this.props.history}/>);
