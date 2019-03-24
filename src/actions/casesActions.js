@@ -5,6 +5,11 @@ const activeCaseCurrentChatSet = (activeCase) => ({
     currentChatCase: activeCase
 });
 
+const currentCaseDescription = (caseDescription) => ({
+    type: 'CURRENT_CASE_DESCRIPTION',
+    chosenCase: caseDescription
+});
+
 export const setActiveCaseCurrentChat = (activeCaseId) => (dispatch, getState) => {
     let role = getState().accountReducer.role;
     let accessToken = localStorage.getItem('accessToken');
@@ -40,8 +45,8 @@ export const fetchChoosenFreeCase = (caseId) => (dispatch, getState) => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data)
-        // dispatch(activeCaseCurrentChatSet(data.case[0]));
+        console.log('chosen case: ', data)
+        dispatch(currentCaseDescription(data.case[0]));
     })
     .catch(error => console.log(error));
 }

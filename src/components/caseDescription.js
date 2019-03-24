@@ -7,39 +7,59 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
+import moment from 'moment'
 
 const styles = {
   card: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
     width: '100%',
     marginTop: 70,
     height: '80vh',
+    padding: 30
   },
+  cardContent: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  buttonArea: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  }
 };
 
 class CaseDescription extends React.Component {
   
   render() {
-    const { classes } = this.props;
+    const { classes, chosenCase, user, history, getCase } = this.props;
+    console.log('cc', chosenCase)
+    const buttonGetCase = (
+      <Button size="large" color="primary" onClick={ getCase }>
+        Get case
+      </Button>
+    );
+
     return (
       <Card className={classes.card}>
-        <CardActionArea>
-          <CardContent>
+          <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5" component="h2">
-              Lizard
+              { chosenCase.description }
             </Typography>
             <Typography component="p">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-              across all continents except Antarctica
+              author: { chosenCase.neederLogin }
+            </Typography>
+            <Typography component="p">
+              date: { moment(chosenCase.timeStamp).format('lll') }
             </Typography>
           </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Share
+        <CardActions className={classes.buttonArea}>
+          <Button size="large" color="primary" onClick={() => { history.goBack() }}>
+            Back
           </Button>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
+          { user.role === 'hero' ? buttonGetCase : (<React.Fragment></React.Fragment>) }
         </CardActions>
       </Card>
     );
@@ -47,14 +67,18 @@ class CaseDescription extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('object ', state.casesReducer.chosenCase)
     return {
-        user: state.accountReducer.user
+        user: state.accountReducer.user,
+        chosenCase: state.casesReducer.chosenCase
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendMessage: () => {}
+    getCase: () => {
+      
+    }
   }
 }
 
