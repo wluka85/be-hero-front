@@ -42,7 +42,12 @@ class SidebarContent extends Component {
         let level;
         role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
-        let createNewCase = 'Create new case'
+        const buttonCreateCase = (
+            <ListItem button onClick={handleShowCreateCaseDialog}>
+                <ListItemIcon><AddBoxIcon/></ListItemIcon>
+                <ListItemText primary='Create new case' />
+            </ListItem>
+        )
         return (
             <React.Fragment>
                 <ListItem>
@@ -58,16 +63,13 @@ class SidebarContent extends Component {
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
                 </ListItem>
-                <ListItem button onClick={handleShowCreateCaseDialog}>
-                    <ListItemIcon><AddBoxIcon/></ListItemIcon>
-                    <ListItemText primary={ createNewCase } />
-                </ListItem>
+                { role === 'needer' ? buttonCreateCase : (<React.Fragment></React.Fragment>) }
             </React.Fragment>
         )
     }
 
     getSelfCases() {
-        const { activeCases, handleSetCurrentActiveCase } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
 
         return (
             <React.Fragment>
@@ -79,7 +81,10 @@ class SidebarContent extends Component {
                     {
                         activeCases.map((element, i) => {
                             return (
-                            <ListItem button key={i} onClick={ () => { handleSetCurrentActiveCase(element._id)} }>
+                            <ListItem button key={i} onClick={ () => {
+                                    history.push('/' + role + '/chat/' + element._id);
+                                    handleSetCurrentActiveCase(element._id);
+                                }}>
                                 <ListItemIcon><TouchIcon /></ListItemIcon>
                                 <ListItemText primary={ element.description } />
                             </ListItem>
