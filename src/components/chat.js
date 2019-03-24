@@ -106,6 +106,10 @@ class Chat extends React.Component {
     this.refs.chatContent.scrollIntoView({block: "end"});
   }
 
+  clearInput = () => {
+    this.setState({messageInput: ''});
+  }
+
   render() {
     const { classes, currentActiveCase, chatDialog, sendMessage, user } = this.props;
     const chatContent = (
@@ -164,16 +168,21 @@ class Chat extends React.Component {
           onKeyDown={(e) => {
             if (e.keyCode === 13) {
               sendMessage(this.state.messageInput);
+              this.clearInput();
             }
           }}
             
           className={classes.input} 
-          placeholder="Type message" />
+          placeholder="Type message"
+          value={this.state.messageInput} />
         <IconButton 
         className={classes.iconButton} 
         aria-label="Send"
         onClick={
-            () => sendMessage(this.state.messageInput)
+            () => {
+              sendMessage(this.state.messageInput);
+              this.clearInput();
+              }
           }
           >
           <SendIcon />
