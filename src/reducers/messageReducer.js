@@ -1,6 +1,8 @@
 const initialState = {
     alertMessage: '',
-    isVisible: false
+    isVisible: false,
+    userIsTyping: false,
+    sender: ''
 };
 
 const messageReducer = (state=initialState, action) => {
@@ -10,6 +12,9 @@ const messageReducer = (state=initialState, action) => {
 
         case 'CLOSE_MESSAGE':
             return { ...state, alertMessage: '', isVisible: false};
+
+        case 'IS_TYPING': 
+          return {...state, userIsTyping: action.isTyping, sender: action.sender};
 
         default:
             return state;
