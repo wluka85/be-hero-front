@@ -9,7 +9,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { addMessageToChat } from '../actions/chatActions';
-import { sendChatMessage } from '../actions/socketActions';
+import { sendChatMessage, sendUserTyping } from '../actions/socketActions';
 import moment from 'moment';
 
 const styles = theme => ({
@@ -93,21 +93,60 @@ const styles = theme => ({
     "&:last-child": {
       paddingBottom: '10px'
     }
+  },
+  userTyping: {
+    visibility: 'hidden',
+    color: 'red'
   }
 });
 
 class Chat extends React.Component {
 
   state = {
-    messageInput: ''
+    messageInput: '',
+    isTyping: false
   }
 
   componentDidUpdate() {
-    this.refs.chatContent.scrollIntoView({block: "end"});
+    this.refs.isTypingContent.scrollIntoView({block: "end"});
+  }
+
+  clearInput = () => {
+    this.setState({messageInput: ''});
+  }
+
+  isUserTyping = () => {
+    const { sendIsTyping } = this.props;
+    const lastUpdateTime = Date.now();
+    console.log('enter is typing')
+    this.setState({isTyping: true});
+    sendIsTyping(true);
+    this.startCheckingTyping(lastUpdateTime);
+  }
+
+  startCheckingTyping = (lastUpdateTime) => {
+    console.log('in start checking')
+    const typingInterval = setInterval(() => {
+      if(Date.now() - lastUpdateTime > 3000) {
+        this.setState({isTyping: false});
+        this.stopCheckingTyping(typingInterval);
+      }
+    }, 3000);
+  }
+
+  stopCheckingTyping = (typingInterval) => {
+    const { sendIsTyping } = this.props;
+    console.log('in stop checking', typingInterval)
+    if(typingInterval) {
+      clearInterval(typingInterval);
+      console.log('we are stopped typing')
+      sendIsTyping(false);
+    }
   }
 
   render() {
-    const { classes, currentActiveCase, chatDialog, sendMessage, user } = this.props;
+    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping } = this.props;
+    console.log('user typing... ',userIsTyping)
     const chatContent = (
       <div ref='chatContent' >
         { chatDialog.map((element, key) => {
@@ -153,6 +192,7 @@ class Chat extends React.Component {
         </Card>
         <Paper className={classes.chatPaper} elevation={1}>
           { chatContent }
+          <div ref='isTypingContent' className={!userIsTyping ? classes.userTyping : ''}>Is typing...</div>
         </Paper>
         <Paper className={classes.messageTyper} elevation={1}>
         <InputBase onChange={
@@ -161,19 +201,28 @@ class Chat extends React.Component {
             }
           } 
           
-          onKeyDown={(e) => {
+          onKeyDown = {(e) => {
             if (e.keyCode === 13) {
               sendMessage(this.state.messageInput);
+              this.clearInput();
+              sendIsTyping(false);
             }
           }}
+
+          onKeyUp = { e => { e.keyCode !== 13 && this.isUserTyping() } }
             
           className={classes.input} 
-          placeholder="Type message" />
+          placeholder="Type message"
+          value={this.state.messageInput} />
         <IconButton 
         className={classes.iconButton} 
         aria-label="Send"
         onClick={
-            () => sendMessage(this.state.messageInput)
+            () => {
+              sendMessage(this.state.messageInput);
+              this.clearInput();
+              sendIsTyping(false);
+              }
           }
           >
           <SendIcon />
@@ -189,7 +238,9 @@ const mapStateToProps = (state) => {
     return {
         currentActiveCase: state.casesReducer.currentChatCase,
         chatDialog: state.casesReducer.chatDialog,
-        user: state.accountReducer.user
+        user: state.accountReducer.user,
+        userIsTyping: state.messageReducer.userIsTyping,
+        sender: state.messageReducer.sender
     }
 }
 
@@ -198,6 +249,9 @@ const mapDispatchToProps = (dispatch) => {
     sendMessage: (message) => {
       dispatch(sendChatMessage(message));
       dispatch(addMessageToChat(message));
+    },
+    sendIsTyping: (isTyping) => {
+      dispatch(sendUserTyping(isTyping));
     }
   }
 }
