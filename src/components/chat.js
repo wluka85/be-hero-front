@@ -141,13 +141,13 @@ class Chat extends React.Component {
         <Card className={classes.card}>
           <CardContent>
             <Typography className={classes.title} color="textSecondary" gutterBottom>
-              name: { currentActiveCase.neederLogin }
+              author: { currentActiveCase.neederLogin }
             </Typography>
             <Typography variant="h6" className={classes.description} component="h2">
               { currentActiveCase.description }
             </Typography>
             <Typography className={classes.posDate} color="textSecondary">
-              date: {currentActiveCase.timeStamp}
+              {moment(currentActiveCase.timeStamp).format('lll')}
             </Typography>
           </CardContent>
         </Card>
