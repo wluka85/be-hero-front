@@ -7,7 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
-import moment from 'moment'
+import moment from 'moment';
+import { sendCaseTakenMessage } from '../actions/socketActions'
 
 const styles = {
   card: {
@@ -34,10 +35,9 @@ const styles = {
 class CaseDescription extends React.Component {
   
   render() {
-    const { classes, chosenCase, user, history, getCase } = this.props;
-    console.log('cc', chosenCase)
+    const { classes, chosenCase, user, history, handleGetCase } = this.props;
     const buttonGetCase = (
-      <Button size="large" color="primary" onClick={ getCase }>
+      <Button size="large" color="primary" onClick={ ()=> { handleGetCase(chosenCase) }}>
         Get case
       </Button>
     );
@@ -76,9 +76,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCase: () => {
-      
-    }
+    handleGetCase: (chosenCase) => dispatch(sendCaseTakenMessage(chosenCase))
   }
 }
 
