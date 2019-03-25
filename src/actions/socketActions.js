@@ -18,6 +18,11 @@ export const createdCaseSent = (message) => ({
     message: message
 });
 
+export const caseTakenSent = (message) => ({
+    type: 'server/case-taken',
+    message: message
+});
+
 export const sendChatMessage = (message) => (dispatch, getState) => {
     console.log('state of message: ', getState())
     const role = getState().accountReducer.user.role;
@@ -42,3 +47,15 @@ export const sendCreatedCase = (description) => (dispatch, getState) => {
     console.log('content ', content)
     dispatch(createdCaseSent(content))
 };
+
+export const sendCaseTakenMessage = (chosenCase) => (dispatch, getState) => {
+    console.log('chsen: ', chosenCase)
+    const user = getState().accountReducer.user;
+    console.log('Case Id taken: ', chosenCase._id)
+    const content = {
+        caseId: chosenCase._id,
+        neederId: chosenCase.neederId,
+        user: user
+    }
+    dispatch(caseTakenSent(content));
+}
