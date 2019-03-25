@@ -94,9 +94,17 @@ const styles = theme => ({
       paddingBottom: '10px'
     }
   },
-  userTyping: {
+  userNotTyping: {
     visibility: 'hidden',
-    color: 'red'
+    padding: '5px'
+  },
+  userTyping: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: '5px',
+    paddingRight: '10px',
+    fontSize: '0.8em',
+    color: '#616161'
   }
 });
 
@@ -192,8 +200,8 @@ class Chat extends React.Component {
         </Card>
         <Paper className={classes.chatPaper} elevation={1}>
           { chatContent }
-          <div ref='isTypingContent' className={!userIsTyping ? classes.userTyping : ''}>Is typing...</div>
         </Paper>
+        <div ref='isTypingContent' className={!userIsTyping ? classes.userNotTyping : classes.userTyping}>Is typing...</div>
         <Paper className={classes.messageTyper} elevation={1}>
         <InputBase onChange={
           (e) => {
