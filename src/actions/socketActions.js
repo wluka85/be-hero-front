@@ -37,14 +37,9 @@ export const sendUserTyping = (isTyping) => (dispatch, getState) => {
 }
 
 export const sendChatMessage = (message) => (dispatch, getState) => {
-    console.log('state of message: ', getState())
-    // const role = getState().accountReducer.user.role;
-    // const currentChatCase = getState().casesReducer.currentChatCase;
-    // const reciever = role === 'needer' ? currentChatCase.heroId : currentChatCase.neederId;
     const reciever = getReciever(getState);
     const content = {
         contents: message, 
-        // sender: sender,
         reciever: reciever,
         author: getState().accountReducer.user.name,
         caseId: getState().casesReducer.currentChatCase._id
@@ -70,14 +65,11 @@ export const sendCreatedCase = (description) => (dispatch, getState) => {
         description: description, 
         user: user
     }
-    console.log('content ', content)
     dispatch(createdCaseSent(content))
 };
 
 export const sendCaseTakenMessage = (chosenCase) => (dispatch, getState) => {
-    console.log('chsen: ', chosenCase)
     const user = getState().accountReducer.user;
-    console.log('Case Id taken: ', chosenCase._id)
     const content = {
         caseId: chosenCase._id,
         neederId: chosenCase.neederId,
