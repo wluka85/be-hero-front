@@ -239,7 +239,8 @@ const mapStateToProps = (state) => {
         currentActiveCase: state.casesReducer.currentChatCase,
         chatDialog: state.casesReducer.chatDialog,
         user: state.accountReducer.user,
-        userIsTyping: state.messageReducer.userIsTyping
+        userIsTyping: state.messageReducer.userIsTyping,
+        sender: state.messageReducer.sender
     }
 }
 
