@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { handleSignedOut } from '../actions/accountActions'
-import { fetchHeroSelfCases } from '../actions/heroActions';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
 import PersonIcon from '@material-ui/icons/Person';
@@ -134,7 +133,6 @@ const mapDispatchToProps = (dispatch) => {
         handleLogout: () => {
             dispatch(handleSignedOut());
         },
-        handleFetchHeroCases: () => dispatch(fetchHeroSelfCases()),
         handleFetchNeederCases: () => { },
         handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id)),
         handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'})
