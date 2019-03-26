@@ -60,7 +60,7 @@ class SidebarContent extends Component {
                 </ListItem>
                 { role === 'hero' ? levelContent : (<React.Fragment></React.Fragment>) }
                 <Divider />
-                <ListItem button onClick={() => {history.push('/', role)}}>
+                <ListItem button onClick={() => {history.push('/' + role + '/main')}}>
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
                 </ListItem>

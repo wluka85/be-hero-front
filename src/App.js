@@ -21,12 +21,12 @@ class App extends Component {
         <Router>
           <div className="container">
             <Route exact path="/" component={Account} />
-            <Route exact path="/hero" component={MainContainer}/>
-            <Route exact path="/needer" component={MainContainer} />
-            <Route exact path="/hero/chat/:id" component={MainContainer} />
+            <Route path="/hero" component={MainContainer}/>
+            <Route path="/needer" component={MainContainer} />
+            {/* <Route exact path="/hero/chat/:id" component={MainContainer} />
             <Route exact path="/needer/chat/:id" component={MainContainer} />
             <Route exact path="/hero/case-description/:id" component={MainContainer} />
-            <Route exact path="/needer/case-description/:id" component={MainContainer} />
+            <Route exact path="/needer/case-description/:id" component={MainContainer} /> */}
           </div>
         </Router>
       </MuiThemeProvider>

@@ -17,7 +17,7 @@ class Account extends Component {
         const { onSubmit, message, handleRegister, isLoggedIn, role } = this.props;
 
         if (isLoggedIn) {
-            return (<Redirect to={ role } />)
+            return (<Redirect to={ role + '/main' } />)
         }
         
         return (

@@ -13,6 +13,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import CaseDescription from './caseDescription';
 import MessageSnackbar from './messageSnackbar';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 
 const drawerWidth = 300;
 
@@ -97,18 +101,7 @@ class MainContainer extends React.Component {
       );
     } else if (!isLoggedIn) {
       return (<Redirect to='/' />)
-    }
-    let mainContent = (<div></div>);
-    
-    if (this.props.match.path.includes('chat')) {
-      mainContent = (<Chat/>);
-    } else if (this.props.match.path.includes('case-description')) {
-      mainContent = (<CaseDescription history= {this.props.history}/>);
-    } 
-    else {
-      mainContent = (<CasesTable history={this.props.history}/>);
-    }
-    
+    }    
 
     const drawer = (<SidebarContent history={this.props.history}/>);
     const appBar = (<AppHeader/>);
@@ -144,7 +137,12 @@ class MainContainer extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-          { mainContent }
+            <Route exact path="/hero/main" component={CasesTable} />
+            <Route exact path="/hero/chat/:id" component={Chat} />
+            <Route exact path="/hero/case-description/:id" component={CaseDescription} />
+            <Route exact path="/needer/main" component={CasesTable} />
+            <Route exact path="/needer/chat/:id" component={Chat} />
+            <Route exact path="/needer/case-description/:id" component={CaseDescription} />
           <MessageSnackbar/>
       </div>
     );
