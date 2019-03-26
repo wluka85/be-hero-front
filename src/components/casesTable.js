@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { connect } from "react-redux";
 import { fetchChoosenFreeCase } from '../actions/casesActions'
+import moment from 'moment';
 
 const styles = theme => ({
   root: {
@@ -17,9 +18,15 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   table: {
-    // minWidth: 700,
+
+  },
+  tableCell: {
+    padding: '10px !important',
+    width: '100px',
   },
   casesDescription: {
+    fontSize: '1em',
+    padding: '10px !important',
     '&:hover': {
       cursor: 'pointer',
       color: '#008cd9 !important'
@@ -31,14 +38,15 @@ class CasesTable extends React.Component {
 
 render() {
     const { classes, freeCases, history, role, handleFetchChoosenFreeCase } = this.props;
-    console.log(role)
+
     return (
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
                 <TableCell>Description</TableCell>
-                <TableCell align="right">Login</TableCell>
+                <TableCell align="center" padding='none'>Date</TableCell>
+                <TableCell align="center">Author</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -48,7 +56,12 @@ render() {
                       history.push('/' +  role + '/case-description/' + freeCase._id);
                       handleFetchChoosenFreeCase(freeCase._id)
                     }}>{freeCase.description}</TableCell>
-                  <TableCell align="right">{freeCase.login}</TableCell>
+                    <TableCell className={classes.tableCell} align="center">
+                      {moment(freeCase.timeStamp).format('ll')}
+                      <br/>
+                      {moment(freeCase.timeStamp).format('LT')}
+                    </TableCell>
+                  <TableCell className={classes.tableCell} align="center">{freeCase.neederLogin}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
