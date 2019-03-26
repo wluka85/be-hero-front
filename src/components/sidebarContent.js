@@ -38,8 +38,12 @@ class SidebarContent extends Component {
 
     getUserProfileItem() {
         const { role, userName, userLevel, history, handleShowCreateCaseDialog } = this.props;
-        let level;
-        role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
+        const levelContent = (
+            <ListItem>
+                <ListItemIcon><StarRateIcon/></ListItemIcon>
+                <ListItemText primary={<b>Level: { userLevel }</b>}/>
+            </ListItem>
+        )
         let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
         const buttonCreateCase = (
             <ListItem button onClick={handleShowCreateCaseDialog}>
@@ -53,10 +57,7 @@ class SidebarContent extends Component {
                     <ListItemIcon><PersonIcon /></ListItemIcon>
                     <ListItemText primary={ signedInAs } />
                 </ListItem>
-                <ListItem>
-                    <ListItemIcon><StarRateIcon/></ListItemIcon>
-                    <ListItemText primary={ level } />
-                </ListItem>
+                { role === 'hero' ? levelContent : (<React.Fragment></React.Fragment>) }
                 <Divider />
                 <ListItem button onClick={() => {history.push('/', role)}}>
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
