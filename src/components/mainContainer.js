@@ -12,6 +12,7 @@ import { handleAutoSignIn } from "../actions/accountActions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import CaseDescription from './caseDescription';
+import MessageSnackbar from './messageSnackbar';
 
 const drawerWidth = 300;
 
@@ -144,6 +145,7 @@ class MainContainer extends React.Component {
           </Hidden>
         </nav>
           { mainContent }
+          <MessageSnackbar/>
       </div>
     );
   }
