@@ -105,6 +105,17 @@ const styles = theme => ({
     paddingRight: '10px',
     fontSize: '0.8em',
     color: '#616161'
+  },
+  notificationContainer: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center'
+  },
+  notification: {
+    lineHeight: '500%',
+    color: '#757575',
+    fontSize: '3em',
+    fontWeight: 'bold'
   }
 });
 
@@ -155,8 +166,8 @@ class Chat extends React.Component {
   render() {
     const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping } = this.props;
     const chatContent = (
-      <div ref='chatContent' >
-        { chatDialog.map((element, key) => {
+      <div ref='chatContent'>
+        {chatDialog.length ? chatDialog.map((element, key) => {
           return (
             <div className={user.name === element.author ? classes.firstPersonDiv : classes.secondPersonDiv} key={key}>
               <Card
@@ -178,6 +189,11 @@ class Chat extends React.Component {
             </div>
             )
           })
+          : <div className={classes.notificationContainer}>
+              <Typography className={classes.notification}>
+                Create your first message!
+              </Typography>
+            </div>
         }
       </div>
     );
