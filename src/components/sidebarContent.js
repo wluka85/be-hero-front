@@ -4,8 +4,6 @@ import { handleSignedOut } from '../actions/accountActions'
 import { fetchHeroSelfCases } from '../actions/heroActions';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
-import PersonIcon from '@material-ui/icons/Person';
-import StarRateIcon from '@material-ui/icons/StarRate';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -35,13 +33,13 @@ const styles = theme => ({
     },
     sidebarContainer: {
       position: 'relative',
-      height: '45vh'
+      height: '65vh'
     },
     casesContainer: {
       position: 'relative',
-      top: 203,
+      top: 103,
       overflow: 'auto',
-      height: 'calc(100% + 75px)'
+      height: 'calc(100% + 45px)'
     },
     signoutContainer: {
       position: 'fixed',
@@ -52,17 +50,17 @@ const styles = theme => ({
     },
     userinfoContainer: {
       position: 'fixed',
-      top: 0
+      top: 0,
+      width: '300px',
+      backgroundColor: 'white',
+      borderRight: '1px solid #e0e0e0'
     }
   });
 
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, userName, userLevel, history, handleShowCreateCaseDialog } = this.props;
-        let level;
-        role === 'hero' ? level = (<b>Level: { userLevel }</b> ): level = '';
-        let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
+        const { role, history, handleShowCreateCaseDialog } = this.props;
         const buttonCreateCase = (
             <ListItem button onClick={handleShowCreateCaseDialog}>
                 <ListItemIcon><AddBoxIcon/></ListItemIcon>
@@ -71,15 +69,6 @@ class SidebarContent extends Component {
         )
         return (
             <React.Fragment>
-                <ListItem>
-                    <ListItemIcon><PersonIcon /></ListItemIcon>
-                    <ListItemText primary={ signedInAs } />
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon><StarRateIcon/></ListItemIcon>
-                    <ListItemText primary={ level } />
-                </ListItem>
-                <Divider />
                 <ListItem button onClick={() => {history.push('/', role)}}>
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
