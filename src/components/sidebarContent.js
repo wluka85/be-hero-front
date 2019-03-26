@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import { handleSignedOut } from '../actions/accountActions'
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import Divider from '@material-ui/core/Divider';
-import PersonIcon from '@material-ui/icons/Person';
-import StarRateIcon from '@material-ui/icons/StarRate';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,20 +30,37 @@ const styles = theme => ({
     content: {
       flexGrow: 1,
       padding: theme.spacing.unit * 3,
+    },
+    sidebarContainer: {
+      position: 'relative',
+      height: '65vh'
+    },
+    casesContainer: {
+      position: 'relative',
+      top: 103,
+      overflow: 'auto',
+      height: 'calc(100% + 45px)'
+    },
+    signoutContainer: {
+      position: 'fixed',
+      bottom: 0,
+      width: '300px',
+      backgroundColor: 'white',
+      borderRight: '1px solid #e0e0e0'
+    },
+    userinfoContainer: {
+      position: 'fixed',
+      top: 0,
+      width: '300px',
+      backgroundColor: 'white',
+      borderRight: '1px solid #e0e0e0'
     }
   });
 
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, userName, userLevel, history, handleShowCreateCaseDialog } = this.props;
-        const levelContent = (
-            <ListItem>
-                <ListItemIcon><StarRateIcon/></ListItemIcon>
-                <ListItemText primary={<b>Level: { userLevel }</b>}/>
-            </ListItem>
-        )
-        let signedInAs = (<p>Signed in as <b>{ userName }</b></p>);
+        const { role, history, handleShowCreateCaseDialog } = this.props;
         const buttonCreateCase = (
             <ListItem button onClick={handleShowCreateCaseDialog}>
                 <ListItemIcon><AddBoxIcon/></ListItemIcon>
@@ -54,13 +69,7 @@ class SidebarContent extends Component {
         )
         return (
             <React.Fragment>
-                <ListItem>
-                    <ListItemIcon><PersonIcon /></ListItemIcon>
-                    <ListItemText primary={ signedInAs } />
-                </ListItem>
-                { role === 'hero' ? levelContent : (<React.Fragment></React.Fragment>) }
-                <Divider />
-                <ListItem button onClick={() => {history.push('/' + role + '/main')}}>
+                <ListItem button onClick={() => {history.push('/', role)}}>
                     <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
                     <ListItemText primary='Free cases' />
                 </ListItem>
@@ -122,10 +131,11 @@ class SidebarContent extends Component {
     }
 
     getSelfCases() {
+      const {classes} = this.props;
         return (
             <React.Fragment>
                 <Divider/>
-                <List>
+                <List className={classes.casesContainer}>
                     { this.getActiveCasesList() }
                     { this.getFreeActiveCasesList() }
                 </List>
@@ -134,23 +144,24 @@ class SidebarContent extends Component {
     }
 
     render() {
-        const { handleLogout } = this.props;
+        const { handleLogout, classes } = this.props;
 
         return (
-            <React.Fragment>
-                <List>
+            <div className={classes.sidebarContainer}>
+                <List className={classes.userinfoContainer}>
                     { this.getUserProfileItem() }
+                    <Divider/>
                 </List>
                    { this.getSelfCases() } 
-                <Divider />
-                <List>
+                <List className={classes.signoutContainer}>
+                    <Divider/>
                     <ListItem button key='logout' onClick={handleLogout}>
                         <ListItemIcon><ExitIcon /></ListItemIcon>
                         <ListItemText primary='Sign Out' />
                     </ListItem>
                 </List>
                 <CaseCreate/>
-            </React.Fragment>
+            </div>
         );
     }
 }

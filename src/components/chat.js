@@ -154,7 +154,6 @@ class Chat extends React.Component {
 
   render() {
     const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping } = this.props;
-    console.log('user typing... ',userIsTyping)
     const chatContent = (
       <div ref='chatContent' >
         { chatDialog.map((element, key) => {
