@@ -54,6 +54,9 @@ const styles = theme => ({
       width: '300px',
       backgroundColor: 'white',
       borderRight: '1px solid #e0e0e0'
+    },
+    active: {
+      backgroundColor: '#9e9e9e'
     }
   });
 
@@ -79,25 +82,29 @@ class SidebarContent extends Component {
     }
 
     getActiveCasesList() {
-        const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase, currentCase, classes } = this.props;
         return (
             <React.Fragment>
                 <ListItem>
-                        <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
-                    </ListItem>
-                    {
-                        activeCases.map((element, i) => {
-                            if (element.heroId) {
-                                return (
-                                    <ListItem button key={i} onClick={ () => {
-                                            history.push('/' + role + '/chat/' + element._id);
-                                            handleSetCurrentActiveCase(element._id);
-                                        }}>
-                                        <ListItemIcon><TouchIcon /></ListItemIcon>
-                                        <ListItemText primary={ element.description } />
-                                    </ListItem>
-                                )
-                            }
+                  <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
+                  </ListItem>
+                  {
+                      activeCases.map((element, i) => {
+                        if (element.heroId) {
+                            return (
+                              <ListItem 
+                                button 
+                                key={i} 
+                                onClick={ () => {
+                                  handleSetCurrentActiveCase(element._id);
+                                  history.push('/' + role + '/chat/' + element._id);
+                                }}
+                                className={(element._id === currentCase._id) ? classes.active : ''}>
+                              <ListItemIcon><TouchIcon /></ListItemIcon>
+                              <ListItemText primary={ element.description } />
+                              </ListItem>
+                            )
+                          }
                     })
                     }
             </React.Fragment>
@@ -105,7 +112,7 @@ class SidebarContent extends Component {
     }
 
     getFreeActiveCasesList() {
-        const { activeCases, history, role, handleFetchChoosenFreeCase } = this.props;
+        const { activeCases, history, role, handleFetchChoosenFreeCase, currentCase, classes } = this.props;
         return (
             <React.Fragment>
                 <ListItem>
@@ -115,10 +122,14 @@ class SidebarContent extends Component {
                         activeCases.map((element, i) => {
                             if (!element.heroId) {
                                 return (
-                                    <ListItem button key={i} onClick={ () => {
+                                    <ListItem 
+                                      button 
+                                      key={i}  
+                                      onClick={ () => {
+                                        handleFetchChoosenFreeCase(element._id);
                                         history.push('/' +  role + '/case-description/' + element._id);
-                                            handleFetchChoosenFreeCase(element._id);
-                                        }}>
+                                      }}
+                                      className={(element._id === currentCase._id) ? classes.active : ''}>
                                         <ListItemIcon><TouchIcon /></ListItemIcon>
                                         <ListItemText primary={ element.description } />
                                     </ListItem>
@@ -173,7 +184,8 @@ const mapStateToProps = (state) => {
         userName: name + ' ' + surname,
         userLevel: level,
         activeCases: state.casesReducer.activeCases,
-        user: state.accountReducer.user
+        user: state.accountReducer.user,
+        currentCase: state.casesReducer.chosenCase
     }
 };
 
