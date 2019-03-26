@@ -15,6 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddBoxIcon from '@material-ui/icons/AddCircle';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 import CaseCreate from './caseCreate';
+import { fetchChoosenFreeCase } from '../actions/casesActions';
 
 const drawerWidth = 240;
 
@@ -68,29 +69,65 @@ class SidebarContent extends Component {
         )
     }
 
-    getSelfCases() {
+    getActiveCasesList() {
         const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
-
         return (
             <React.Fragment>
-                <Divider/>
-                <List>
-                    <ListItem>
+                <ListItem>
                         <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
                     </ListItem>
                     {
                         activeCases.map((element, i) => {
-                            return (
-                            <ListItem button key={i} onClick={ () => {
-                                    history.push('/' + role + '/chat/' + element._id);
-                                    handleSetCurrentActiveCase(element._id);
-                                }}>
-                                <ListItemIcon><TouchIcon /></ListItemIcon>
-                                <ListItemText primary={ element.description } />
-                            </ListItem>
-                            )
+                            if (element.heroId) {
+                                return (
+                                    <ListItem button key={i} onClick={ () => {
+                                            history.push('/' + role + '/chat/' + element._id);
+                                            handleSetCurrentActiveCase(element._id);
+                                        }}>
+                                        <ListItemIcon><TouchIcon /></ListItemIcon>
+                                        <ListItemText primary={ element.description } />
+                                    </ListItem>
+                                )
+                            }
                     })
-                }
+                    }
+            </React.Fragment>
+        )
+    }
+
+    getFreeActiveCasesList() {
+        const { activeCases, history, role, handleFetchChoosenFreeCase } = this.props;
+        return (
+            <React.Fragment>
+                <ListItem>
+                        <ListItemText primary={(<p><b>Your free active cases:</b></p>)} />
+                    </ListItem>
+                    {
+                        activeCases.map((element, i) => {
+                            if (!element.heroId) {
+                                return (
+                                    <ListItem button key={i} onClick={ () => {
+                                        history.push('/' +  role + '/case-description/' + element._id);
+                                            handleFetchChoosenFreeCase(element._id);
+                                        }}>
+                                        <ListItemIcon><TouchIcon /></ListItemIcon>
+                                        <ListItemText primary={ element.description } />
+                                    </ListItem>
+                                )
+                            }
+                        })
+                    }
+            </React.Fragment>
+        )
+    }
+
+    getSelfCases() {
+        return (
+            <React.Fragment>
+                <Divider/>
+                <List>
+                    { this.getActiveCasesList() }
+                    { this.getFreeActiveCasesList() }
                 </List>
             </React.Fragment>
         )
@@ -136,7 +173,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         handleFetchNeederCases: () => { },
         handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id)),
-        handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'})
+        handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'}),
+        handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))}
     }
 };
 
