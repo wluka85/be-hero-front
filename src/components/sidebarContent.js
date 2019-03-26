@@ -69,6 +69,8 @@ class SidebarContent extends Component {
 
     getSelfCases() {
         const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
+        const occupied = {borderLeft: '5px solid #ffca28', marginTop: 4, marginLeft: 2};
+        const free = {borderLeft: '5px solid #ef5350', marginTop: 4, marginLeft: 2};
 
         return (
             <React.Fragment>
@@ -83,7 +85,8 @@ class SidebarContent extends Component {
                             <ListItem button key={i} onClick={ () => {
                                     history.push('/' + role + '/chat/' + element._id);
                                     handleSetCurrentActiveCase(element._id);
-                                }}>
+                                }}
+                                style={element.heroId ? occupied: free}>
                                 <ListItemIcon><TouchIcon /></ListItemIcon>
                                 <ListItemText primary={ element.description } />
                             </ListItem>
