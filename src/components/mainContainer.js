@@ -110,7 +110,7 @@ class MainContainer extends React.Component {
     
 
     const drawer = (<SidebarContent history={this.props.history}/>);
-    const appBar = (<AppHeader/>);
+    const appBar = (<AppHeader history={this.props.history}/>);
 
     return (
       <div className={classes.root}>
