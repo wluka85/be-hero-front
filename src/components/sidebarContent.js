@@ -32,6 +32,27 @@ const styles = theme => ({
     content: {
       flexGrow: 1,
       padding: theme.spacing.unit * 3,
+    },
+    sidebarContainer: {
+      position: 'relative',
+      height: '45vh'
+    },
+    casesContainer: {
+      position: 'relative',
+      top: 203,
+      overflow: 'auto',
+      height: 'calc(100% + 75px)'
+    },
+    signoutContainer: {
+      position: 'fixed',
+      bottom: 0,
+      width: '300px',
+      backgroundColor: 'white',
+      borderRight: '1px solid #e0e0e0'
+    },
+    userinfoContainer: {
+      position: 'fixed',
+      top: 0
     }
   });
 
@@ -69,51 +90,49 @@ class SidebarContent extends Component {
     }
 
     getSelfCases() {
-        const { activeCases, history, role, handleSetCurrentActiveCase } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase, classes } = this.props;
 
         return (
-            <React.Fragment>
-                <Divider/>
-                <List>
-                    <ListItem>
-                        <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
-                    </ListItem>
-                    {
-                        activeCases.map((element, i) => {
-                            return (
-                            <ListItem button key={i} onClick={ () => {
-                                    history.push('/' + role + '/chat/' + element._id);
-                                    handleSetCurrentActiveCase(element._id);
-                                }}>
-                                <ListItemIcon><TouchIcon /></ListItemIcon>
-                                <ListItemText primary={ element.description } />
-                            </ListItem>
-                            )
-                    })
-                }
-                </List>
-            </React.Fragment>
+          <List className={classes.casesContainer}>
+              <ListItem>
+                  <ListItemText primary={(<p><b>Your active cases:</b></p>)} />
+              </ListItem>
+              {
+                  activeCases.map((element, i) => {
+                      return (
+                      <ListItem button key={i} onClick={ () => {
+                              history.push('/' + role + '/chat/' + element._id);
+                              handleSetCurrentActiveCase(element._id);
+                          }}>
+                          <ListItemIcon><TouchIcon /></ListItemIcon>
+                          <ListItemText primary={ element.description } />
+                      </ListItem>
+                      )
+              })
+          }
+          </List>
         )
     }
 
     render() {
-        const { handleLogout } = this.props;
+        const { handleLogout, classes } = this.props;
 
         return (
-            <React.Fragment>
-                <List>
+            <div className={classes.sidebarContainer}>
+                <List className={classes.userinfoContainer}>
                     { this.getUserProfileItem() }
+                    <Divider/>
                 </List>
                    { this.getSelfCases() } 
-                <Divider />
-                <List>
+                <List className={classes.signoutContainer}>
+                    <Divider/>
                     <ListItem button key='logout' onClick={handleLogout}>
                         <ListItemIcon><ExitIcon /></ListItemIcon>
                         <ListItemText primary='Sign Out' />
                     </ListItem>
                 </List>
                 <CaseCreate/>
-            </React.Fragment>
+            </div>
         );
     }
 }
