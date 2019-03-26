@@ -2,9 +2,11 @@ const initialState = {
     alertMessage: '',
     isVisible: false,
     userIsTyping: false,
-    sender: ''
+    sender: '',
+    shouldSnackbarDisplayed: false,
+    snackbarVariant: 'info',
+    snackbarMessage: ''
 };
-
 const messageReducer = (state=initialState, action) => {
     switch (action.type) {
         case 'DISPLAY_MESSAGE':
@@ -15,6 +17,13 @@ const messageReducer = (state=initialState, action) => {
 
         case 'IS_TYPING': 
           return {...state, userIsTyping: action.isTyping, sender: action.sender};
+
+        case 'SNACKBAR_MESSAGE_DISPLAYED':
+            return { ...state, shouldSnackbarDisplayed: action.shouldSnackbarDisplayed };
+
+        case 'DISPLAY_SNACKBAR_MESSAGE':
+            console.log('Snackbar message: ', action)
+            return { ...state, shouldSnackbarDisplayed: true, snackbarVariant: action.snackbarVariant, snackbarMessage: action.snackbarMessage }
 
         default:
             return state;
