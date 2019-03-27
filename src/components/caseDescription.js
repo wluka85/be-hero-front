@@ -59,7 +59,10 @@ class CaseDescription extends React.Component {
   render() {
     const { classes, chosenCase, user, history, handleGetCase } = this.props;
     const buttonGetCase = (
-      <Button size="large" color="primary" onClick={ ()=> { handleGetCase(chosenCase) }}>
+      <Button size="large" color="primary" onClick={ ()=> { 
+          handleGetCase(chosenCase);
+          history.push('/' + user.role + '/chat/' + chosenCase._id);
+        }}>
         Get case
       </Button>
     );
