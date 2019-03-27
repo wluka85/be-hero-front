@@ -23,6 +23,11 @@ export const caseTakenSent = (message) => ({
     message: message
 });
 
+export const caseCompletedSent = (message) => ({
+  type: 'server/case-completed',
+  message: message
+});
+
 export const userTyping = (isTyping, messageReciever, messageSender) => ({
   type: 'server/user-is-typing',
   isTyping: isTyping,
@@ -76,4 +81,11 @@ export const sendCaseTakenMessage = (chosenCase) => (dispatch, getState) => {
         user: user
     }
     dispatch(caseTakenSent(content));
+}
+
+export const sendCaseCompleted = (completedCase) => (dispatch, getState) => {
+  const content = {
+    completedCase: completedCase
+  }
+  dispatch(caseCompletedSent(content));
 }
