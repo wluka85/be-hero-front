@@ -67,7 +67,7 @@ export class AppHeader extends Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h4" color="inherit" noWrap>
+              <Typography variant="h6" color="inherit" noWrap>
                 BeHero
               </Typography>
               <div>

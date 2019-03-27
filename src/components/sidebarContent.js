@@ -15,6 +15,7 @@ import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 import Button from '@material-ui/core/Button';
 import CaseCreate from './caseCreate';
 import { fetchChoosenFreeCase } from '../actions/casesActions';
+import { handleSidebarClose } from '../actions/sidebarActions';
 
 const drawerWidth = 240;
 
@@ -90,7 +91,11 @@ class SidebarContent extends Component {
     getUserProfileItem() {
         const { role, history, handleShowCreateCaseDialog, classes } = this.props;
         const buttonCreateCase = (
-            <div button onClick={handleShowCreateCaseDialog} className={classes.menuElement}>
+            <div button onClick={() => {
+                handleSidebarClose();
+                handleShowCreateCaseDialog();
+                }}
+                className={classes.menuElement}>
               <ListItemText
                 className={classes.buttBox}
                 primary={
@@ -105,7 +110,11 @@ class SidebarContent extends Component {
               <div className={classes.menuButtonsContainer}>
                 <div
                   button
-                  onClick={() => {history.push('/', role)}}
+                  onClick={() => {
+                    handleSidebarClose();
+                    history.push('/', role);
+                    }
+                  }
                   className={classes.menuElement}>
                   <ListItemText className={classes.buttBox}
                     primary={
@@ -122,7 +131,7 @@ class SidebarContent extends Component {
     }
 
     getActiveCasesList() {
-        const { activeCases, history, role, handleSetCurrentActiveCase, currentCase, classes } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase, currentCase, classes, handleSidebarClose } = this.props;
         return (
             <React.Fragment>
                 <ListItem>
@@ -137,6 +146,7 @@ class SidebarContent extends Component {
                                 key={i}
                                 onClick={ () => {
                                   handleSetCurrentActiveCase(element._id);
+                                  handleSidebarClose();
                                   history.push('/' + role + '/chat/' + element._id);
                                 }}
                                 className={(element._id === currentCase._id) ? classes.active : ''}>
@@ -168,6 +178,7 @@ class SidebarContent extends Component {
                                       key={i}
                                       onClick={ () => {
                                         handleFetchChoosenFreeCase(element._id);
+                                        handleSidebarClose();
                                         history.push('/' +  role + '/case-description/' + element._id);
                                       }}
                                       className={(element._id === currentCase._id) ? classes.active : ''}>
@@ -255,7 +266,8 @@ const mapDispatchToProps = (dispatch) => {
         handleFetchNeederCases: () => { },
         handleSetCurrentActiveCase: (id) => dispatch(setActiveCaseCurrentChat(id)),
         handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'}),
-        handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))}
+        handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))},
+        handleSidebarClose: () => { dispatch(handleSidebarClose())},
     }
 };
 

@@ -11,7 +11,10 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: 15
+    padding: 15,
+    [theme.breakpoints.down('xs')]: {
+      width: '200px'
+    },
   }
 });
 
