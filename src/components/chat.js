@@ -21,15 +21,24 @@ const styles = theme => ({
     width: '100%',
     marginTop: 70,
     height: '18vh',
-    minHeight: 110
+    minHeight: 110,
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#f5f5f5'
+    }
   },
   firstPersonCard: {
-    backgroundColor: '#008cd9',
+    backgroundColor: '#80cbc4',
     marginTop: 10,
+    '&:last-child': {
+      marginBottom: 10
+    }
   },
   firstPersonDiv: {
     display: 'flex',
     flexDirection: 'row',
+    maxWidth: '100%',
+    overflow: 'auto'    
   },
   secondPersonCard: {
     backgroundColor: '#f1efef',
@@ -37,7 +46,9 @@ const styles = theme => ({
   },
   secondPersonDiv: {
     display: 'flex',
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
+    maxWidth: '100%',
+    overflow: 'auto'
   },
   chatPaper: {
     ...theme.mixins.gutters(),
@@ -53,13 +64,15 @@ const styles = theme => ({
   },
   firstPersonTitle: {
     fontSize: 14,
-    color: 'white'
+    color: '#424242'
   },
   firstPersonContent: {
-    color: 'white'
+    wordBreak: 'break-all'
+  },
+  secondPersonContent: {
+    wordBreak: 'break-all'
   },
   firstPersonPosDate: {
-    color: 'white',
     textAlign: 'right',
     fontSize: 10,
   },
@@ -233,7 +246,7 @@ class Chat extends React.Component {
           } 
           
           onKeyDown = {(e) => {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && this.state.messageInput) {
               sendMessage(this.state.messageInput);
               this.clearInput();
               sendIsTyping(false);
@@ -250,10 +263,12 @@ class Chat extends React.Component {
         aria-label="Send"
         onClick={
             () => {
-              sendMessage(this.state.messageInput);
-              this.clearInput();
-              sendIsTyping(false);
+              if(this.state.messageInput) {
+                sendMessage(this.state.messageInput);
+                this.clearInput();
+                sendIsTyping(false);
               }
+            }
           }
           >
           <SendIcon />
