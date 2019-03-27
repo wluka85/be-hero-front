@@ -37,7 +37,7 @@ const styles = theme => ({
     },
     casesContainer: {
       position: 'relative',
-      top: 103,
+
       overflow: 'auto',
       height: 'calc(100% + 45px)'
     },
@@ -56,7 +56,7 @@ const styles = theme => ({
       borderRight: '1px solid #e0e0e0'
     },
     active: {
-      backgroundColor: '#9e9e9e'
+      backgroundColor: '#e0e0e0'
     }
   });
 
@@ -142,13 +142,18 @@ class SidebarContent extends Component {
     }
 
     getSelfCases() {
-      const {classes} = this.props;
+      const {classes, role} = this.props;
         return (
             <React.Fragment>
                 <Divider/>
-                <List className={classes.casesContainer}>
-                    { this.getActiveCasesList() }
-                    { this.getFreeActiveCasesList() }
+                <List 
+                  className={classes.casesContainer} 
+                  style={{
+                    top: ((role === 'needer') ? 103 : 55), 
+                    height: (role === 'needer') ? 'calc(100% + 45px)' : 'calc(100% + 85px)'
+                    }}>
+                  { this.getActiveCasesList() }
+                  { this.getFreeActiveCasesList() }
                 </List>
             </React.Fragment>
         )
