@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import AddBoxIcon from '@material-ui/icons/AddCircle';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import Typography from '@material-ui/core/Typography';
 import CaseCreate from './caseCreate';
 import { fetchChoosenFreeCase } from '../actions/casesActions';
 
@@ -45,8 +46,7 @@ const styles = theme => ({
       position: 'fixed',
       bottom: 0,
       width: '300px',
-      backgroundColor: 'white',
-      borderRight: '1px solid #e0e0e0'
+      borderRight: '1px solid #e0e0e0',
     },
     userinfoContainer: {
       position: 'fixed',
@@ -57,6 +57,12 @@ const styles = theme => ({
     },
     active: {
       backgroundColor: '#e0e0e0'
+    },
+    signoutButton: {
+      backgroundColor: '#1565c0',
+      '&:hover': {
+        background: '#0d47a1'
+      }
     }
   });
 
@@ -173,9 +179,9 @@ class SidebarContent extends Component {
                    { this.getSelfCases() } 
                 <List className={classes.signoutContainer}>
                     <Divider/>
-                    <ListItem button key='logout' onClick={handleLogout}>
-                        <ListItemIcon><ExitIcon /></ListItemIcon>
-                        <ListItemText primary='Sign Out' />
+                    <ListItem button key='logout' onClick={handleLogout} className={classes.signoutButton}>
+                        <ListItemIcon><ExitIcon style={{color: 'white'}}/></ListItemIcon>
+                        <ListItemText primary={<Typography fontSize={16} style={{ color: 'white'}}>SIGN OUT</Typography>}/>
                     </ListItem>
                 </List>
                 <CaseCreate/>
