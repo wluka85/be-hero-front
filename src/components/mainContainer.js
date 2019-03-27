@@ -13,18 +13,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import CaseDescription from './caseDescription';
 import MessageSnackbar from './messageSnackbar';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 const drawerWidth = 300;
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    // flexDirection: 'column',
-    // marginLeft: 300
+    display: 'flex'
   },
   spinner: {
     display: 'flex',
@@ -72,7 +67,6 @@ class MainContainer extends React.Component {
     this.resize();
     if (!isLoggedIn) {
       handleAutoSignIn();
-
     } 
   }
   
