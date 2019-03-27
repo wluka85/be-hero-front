@@ -46,6 +46,9 @@ const styles = theme => ({
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    star: {
+      marginRight: 3
+    }
   });
 
 export class AppHeader extends Component {
@@ -70,7 +73,7 @@ export class AppHeader extends Component {
                 <Button color="inherit" onClick={() => {history.push('/', role)}}>{ userName }</Button>
                 {role === 'hero' ? 
                 (<IconButton color="inherit">
-                  <StarIcon />
+                  <StarIcon className={classes.star}/>
                    { level }
                 </IconButton>) :
                 null}

@@ -2,12 +2,23 @@ import React, { Component } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
 import {connect} from 'react-redux';
 import $ from "jquery";
-import { sendCreatedCase } from '../actions/socketActions'
+import { sendCreatedCase } from '../actions/socketActions';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+  dialogContainer: {
+    width: '400px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: 15
+  }
+});
 
 class CaseCreate extends Component {
 
   render() {
-    const {openDialog, handleClose, handleCreateCase } = this.props;
+    const {openDialog, handleClose, handleCreateCase, classes } = this.props;
 
     return (
       <Dialog
@@ -16,28 +27,29 @@ class CaseCreate extends Component {
         aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">New Help Request</DialogTitle>
-          <DialogContent>
+          <DialogContent className={classes.dialogContainer}>
             <DialogContentText>
               How can we help you?
             </DialogContentText>
             <TextField
               autoFocus
-              margin="dense"
+              margin="normal"
               id="case-description"
+              multiline
+              rowsMax="4"
               label="Description"
               type="text"
-              fullWidth
             />
           </DialogContent>
-          <DialogActions>
+          <DialogActions style={{padding: '15px'}}>
             <Button onClick={handleClose} color="primary">
-              Cancel
+              CANCEL
             </Button>
             <Button onClick={() => {
               handleCreateCase();
               handleClose();
-            }} color="primary">
-              Submit
+            }} variant="contained" color="primary">
+              SUBMIT
             </Button>
           </DialogActions>
         </Dialog>
@@ -62,4 +74,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CaseCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CaseCreate));

@@ -70,8 +70,8 @@ class Registration extends Component {
                                         <FormControl id="form-registration-description" type="text" placeholder="Enter description"/>
                                     </FormGroup>
                                 </Col>
-                                <Col md={12}>
-                                    <Button bsStyle="primary" type="submit">Submit</Button>
+                                <Col md={12} offset={9}>
+                                    <Button bsStyle="primary" type="submit">SUBMIT</Button>
                                     <div>
                                         <h2>{ message }</h2>
                                     </div>
@@ -80,7 +80,7 @@ class Registration extends Component {
                         </Row>
                     </ModalBody>
                     <ModalFooter>
-                        <Button outline='true' onClick={ handleClose }>Close</Button>
+                        <Button outline='true' onClick={ handleClose }>CANCEL</Button>
                     </ModalFooter>
                 </Modal>
             </div>
