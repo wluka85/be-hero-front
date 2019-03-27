@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { addMessageToChat } from '../actions/chatActions';
 import { sendChatMessage, sendUserTyping } from '../actions/socketActions';
+import { setActiveCaseCurrentChat } from '../actions/casesActions';
 import moment from 'moment';
 
 const styles = theme => ({
@@ -121,6 +122,12 @@ const styles = theme => ({
 
 class Chat extends React.Component {
 
+  componentDidMount() {
+    const { handleSetCurrentActiveCase } = this.props;
+    const chatId = this.props.match.params.id;
+    handleSetCurrentActiveCase(chatId);
+  }
+
   state = {
     messageInput: '',
     isTyping: false
@@ -129,6 +136,7 @@ class Chat extends React.Component {
   componentDidUpdate() {
     this.refs.isTypingContent.scrollIntoView({block: "end"});
   }
+
 
   clearInput = () => {
     this.setState({messageInput: ''});
@@ -275,7 +283,8 @@ const mapDispatchToProps = (dispatch) => {
     },
     sendIsTyping: (isTyping) => {
       dispatch(sendUserTyping(isTyping));
-    }
+    },
+    handleSetCurrentActiveCase: (id) => { dispatch(setActiveCaseCurrentChat(id)) }
   }
 }
 
