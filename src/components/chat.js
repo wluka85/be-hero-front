@@ -172,7 +172,7 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping } = this.props;
+    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping, history, role } = this.props;
     const chatContent = (
       <div ref='chatContent'>
         {chatDialog.length ? chatDialog.map((element, key) => {
@@ -213,7 +213,7 @@ class Chat extends React.Component {
             <Typography className={classes.title} color="textSecondary" gutterBottom>
               author: { currentActiveCase.neederLogin }
             </Typography>
-            <Typography variant="h6" className={classes.description} component="h2">
+            <Typography variant="h6" className={classes.description} component="h2" onClick={() => history.push('/'+ role + '/case-description/' + currentActiveCase._id)}>
               { currentActiveCase.description }
             </Typography>
             <Typography className={classes.posDate} color="textSecondary">
@@ -267,6 +267,7 @@ class Chat extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        role: state.accountReducer.role,
         currentActiveCase: state.casesReducer.currentChatCase,
         chatDialog: state.casesReducer.chatDialog,
         user: state.accountReducer.user,
