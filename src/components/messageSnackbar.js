@@ -114,8 +114,8 @@ class MessageSnackbar extends React.Component {
   }
 
   render() {
-    const { classes, message, variant } = this.props;
-    console.log('snackbar component render!')
+    const { message, variant } = this.props;
+
     return (
       <div>
         <Snackbar

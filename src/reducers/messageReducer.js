@@ -22,7 +22,6 @@ const messageReducer = (state=initialState, action) => {
             return { ...state, shouldSnackbarDisplayed: action.shouldSnackbarDisplayed };
 
         case 'DISPLAY_SNACKBAR_MESSAGE':
-            console.log('Snackbar message: ', action)
             return { ...state, shouldSnackbarDisplayed: true, snackbarVariant: action.snackbarVariant, snackbarMessage: action.snackbarMessage }
 
         default:
