@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import StarIcon from '@material-ui/icons/Stars';
+import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 300;
@@ -66,11 +67,13 @@ export class AppHeader extends Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
+              <Typography variant="h4" color="inherit" noWrap>
                 BeHero
               </Typography>
               <div>
-                <Button color="inherit" onClick={() => {history.push('/', role)}}>{ userName }</Button>
+                <Tooltip title="Back to main" placement="bottom">
+                  <Button color="inherit" onClick={() => {history.push('/', role)}}>{ userName }</Button>
+                </Tooltip>
                 {role === 'hero' ? 
                 (<IconButton color="inherit">
                   <StarIcon className={classes.star}/>
