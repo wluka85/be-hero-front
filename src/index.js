@@ -8,7 +8,8 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers/rootReducer";
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
-let socket = io('http://localhost:4000');
+import {url} from './actions/apiQueries'
+let socket = io(url);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, createSocketIoMiddleware(socket, "server/"))));
