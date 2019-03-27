@@ -150,7 +150,7 @@ class SidebarContent extends Component {
                   className={classes.casesContainer} 
                   style={{
                     top: ((role === 'needer') ? 103 : 55), 
-                    height: (role === 'needer') ? 'calc(100% + 45px)' : 'calc(100% + 85px)'
+                    height: (role === 'needer') ? 'calc(100% + 67px)' : 'calc(100% + 113px)'
                     }}>
                   { this.getActiveCasesList() }
                   { this.getFreeActiveCasesList() }
