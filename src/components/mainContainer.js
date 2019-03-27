@@ -76,13 +76,17 @@ class MainContainer extends React.Component {
     } 
   }
 
-  componentDidUpdate(prevProps) {
-    const { handleSetCurrentActiveCase } = this.props;
-    const chatId = this.props.match.params.id;
-    if (!prevProps.currentActiveCase._id && prevProps.currentActiveCase._id !== chatId && this.props.match.path.includes('chat')) {
-      handleSetCurrentActiveCase(chatId);
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const { handleSetCurrentActiveCase } = this.props;
+  //   const chatId = this.props.match.params.id;
+  //   console.log('this.props: ', this.props)
+  //   console.log('chat id from url: ', chatId)
+  //   console.log('chat id: ', this.props.currentActiveCase._id)
+  //   if (!prevProps.currentActiveCase._id && prevProps.currentActiveCase._id !== chatId && this.props.match.path.includes('chat')) {
+  //     console.log('change id chat')
+  //     handleSetCurrentActiveCase(chatId);
+  //   }
+  // }
   
   resize = () => {
     const { sidebarOpen, handleSidebarClose } = this.props;
