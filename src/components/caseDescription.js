@@ -66,7 +66,7 @@ class CaseDescription extends React.Component {
   render() {
     const { classes, chosenCase, user, history, handleGetCase, handleCompleteCase } = this.props;
     const buttonGetCase = (
-      <Button size="large" color="primary" onClick={ ()=> { 
+      <Button size="large" color="primary" variant="contained" onClick={ ()=> { 
           handleGetCase(chosenCase);
           history.push('/' + user.role + '/chat/' + chosenCase._id);
         }}>
@@ -75,7 +75,7 @@ class CaseDescription extends React.Component {
     );
 
     const buttonCaseCompleted = (
-      <Button size="large" color="primary" onClick={ ()=> { 
+      <Button size="large" color="secondary" variant="contained" onClick={ ()=> { 
           handleCompleteCase(chosenCase);
           history.push('/' + user.role + '/main');
         }}>
@@ -120,7 +120,7 @@ class CaseDescription extends React.Component {
             </div>
           </CardContent>
         <CardActions className={classes.buttonArea}>
-          <Button size="large" color="primary" onClick={() => { history.goBack() }}>
+          <Button size="large" color="primary" variant="contained" onClick={() => { history.goBack() }}>
             Back
           </Button>
           { user.role === 'hero' && !chosenCase.heroId ? buttonGetCase : (<React.Fragment></React.Fragment>) }
