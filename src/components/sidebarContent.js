@@ -105,6 +105,7 @@ class SidebarContent extends Component {
                               </ListItem>
                             )
                           }
+                          return '';
                     })
                     }
             </React.Fragment>
@@ -135,6 +136,7 @@ class SidebarContent extends Component {
                                     </ListItem>
                                 )
                             }
+                          return '';
                         })
                     }
             </React.Fragment>
