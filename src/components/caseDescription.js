@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { sendCaseTakenMessage } from '../actions/socketActions';
+import { sendCaseTakenMessage, sendCaseCompleted } from '../actions/socketActions';
 import { fetchChoosenFreeCase } from '../actions/casesActions';
 
 const styles = {
@@ -64,13 +64,22 @@ class CaseDescription extends React.Component {
   }
   
   render() {
-    const { classes, chosenCase, user, history, handleGetCase } = this.props;
+    const { classes, chosenCase, user, history, handleGetCase, handleCompleteCase } = this.props;
     const buttonGetCase = (
       <Button size="large" color="primary" onClick={ ()=> { 
           handleGetCase(chosenCase);
           history.push('/' + user.role + '/chat/' + chosenCase._id);
         }}>
         Get case
+      </Button>
+    );
+
+    const buttonCaseCompleted = (
+      <Button size="large" color="primary" onClick={ ()=> { 
+          handleCompleteCase(chosenCase);
+          history.push('/' + user.role + '/main');
+        }}>
+        Complete case
       </Button>
     );
 
@@ -114,7 +123,8 @@ class CaseDescription extends React.Component {
           <Button size="large" color="primary" onClick={() => { history.goBack() }}>
             Back
           </Button>
-          { user.role === 'hero' ? buttonGetCase : (<React.Fragment></React.Fragment>) }
+          { user.role === 'hero' && !chosenCase.heroId ? buttonGetCase : (<React.Fragment></React.Fragment>) }
+          { user.role === 'needer' && chosenCase.heroId ? buttonCaseCompleted : (<React.Fragment></React.Fragment>) }
         </CardActions>
       </Card>
     );
@@ -132,7 +142,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     handleGetCase: (chosenCase) => dispatch(sendCaseTakenMessage(chosenCase)),
-    handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))}
+    handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))},
+    handleCompleteCase: (completedCase) => dispatch(sendCaseCompleted(completedCase))
   }
 }
 
