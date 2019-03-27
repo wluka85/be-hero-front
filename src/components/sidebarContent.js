@@ -12,7 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import AddBoxIcon from '@material-ui/icons/AddCircle';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import CaseCreate from './caseCreate';
 import { fetchChoosenFreeCase } from '../actions/casesActions';
 
@@ -46,6 +46,7 @@ const styles = theme => ({
       position: 'fixed',
       bottom: 0,
       width: '300px',
+      backgroundColor: 'white',
       borderRight: '1px solid #e0e0e0',
     },
     userinfoContainer: {
@@ -59,31 +60,64 @@ const styles = theme => ({
       backgroundColor: '#e0e0e0'
     },
     signoutButton: {
-      backgroundColor: '#1565c0',
+      backgroundColor: '#009688',
       '&:hover': {
-        background: '#0d47a1'
+        background: '#00796b'
       }
+    },
+    menuButtonsContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column'
+    },
+    menuElement: {
+      height: '45px'
+    },
+    buttBox: {
+      display: 'flex',
+      justifyContent: 'center',
+      paddingTop: 5
+    },
+    menuButton: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '240px'
     }
   });
 
 class SidebarContent extends Component {
 
     getUserProfileItem() {
-        const { role, history, handleShowCreateCaseDialog } = this.props;
+        const { role, history, handleShowCreateCaseDialog, classes } = this.props;
         const buttonCreateCase = (
-            <ListItem button onClick={handleShowCreateCaseDialog}>
-                <ListItemIcon><AddBoxIcon/></ListItemIcon>
-                <ListItemText primary='Create new case' />
-            </ListItem>
+            <div button onClick={handleShowCreateCaseDialog} className={classes.menuElement}>
+              <ListItemText
+                className={classes.buttBox}
+                primary={
+                  <Button color="primary"
+                    variant="contained"
+                    className={classes.menuButton}>
+                    <AddBoxIcon style={{color: 'white'}}/>Create new case
+                  </Button>} />
+            </div>
         )
         return (
-            <React.Fragment>
-                <ListItem button onClick={() => {history.push('/', role)}}>
-                    <ListItemIcon><FormatAlignLeftIcon/></ListItemIcon>
-                    <ListItemText primary='Free cases' />
-                </ListItem>
+              <div className={classes.menuButtonsContainer}>
+                <div
+                  button
+                  onClick={() => {history.push('/', role)}}
+                  className={classes.menuElement}>
+                  <ListItemText className={classes.buttBox}
+                    primary={
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        className={classes.menuButton}>
+                        <FormatAlignLeftIcon style={{color: 'white'}}/>Free cases
+                      </Button>} />
+                </div>
                 { role === 'needer' ? buttonCreateCase : (<React.Fragment></React.Fragment>) }
-            </React.Fragment>
+              </div>
         )
     }
 
@@ -100,7 +134,7 @@ class SidebarContent extends Component {
                             return (
                               <ListItem 
                                 button 
-                                key={i} 
+                                key={i}
                                 onClick={ () => {
                                   handleSetCurrentActiveCase(element._id);
                                   history.push('/' + role + '/chat/' + element._id);
@@ -131,7 +165,7 @@ class SidebarContent extends Component {
                                 return (
                                     <ListItem 
                                       button 
-                                      key={i}  
+                                      key={i}
                                       onClick={ () => {
                                         handleFetchChoosenFreeCase(element._id);
                                         history.push('/' +  role + '/case-description/' + element._id);
@@ -177,13 +211,24 @@ class SidebarContent extends Component {
                     <Divider/>
                 </List>
                    { this.getSelfCases() } 
-                <List className={classes.signoutContainer}>
+                <div className={classes.signoutContainer}>
                     <Divider/>
-                    <ListItem button key='logout' onClick={handleLogout} className={classes.signoutButton}>
-                        <ListItemIcon><ExitIcon style={{color: 'white'}}/></ListItemIcon>
-                        <ListItemText primary={<Typography fontSize={16} style={{ color: 'white'}}>SIGN OUT</Typography>}/>
-                    </ListItem>
-                </List>
+                    <div
+                      button
+                      key='logout'
+                      onClick={handleLogout}
+                      className={classes.menuElement}>
+                      <ListItemText
+                        className={classes.buttBox}
+                        primary={
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            className={classes.menuButton}>
+                            <ExitIcon style={{color: 'white'}}/>Sign Out
+                          </Button>} />
+                    </div>
+                </div>
                 <CaseCreate/>
             </div>
         );
