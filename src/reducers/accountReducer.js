@@ -33,6 +33,11 @@ const accountReducer = (state=initialState, action) => {
         case 'REDIRECTION':
             return { ...state, redirect: action.redirect, waitingForLoggedIn: action.waitingForLoggedIn }
 
+        case 'INCREMENT_HERO_LEVEL':
+            let tempUser = state.user;
+            tempUser.level = action.newLevel
+            return { ...state, user: tempUser };
+
         default:
             return state;
     }
