@@ -91,7 +91,8 @@ class SidebarContent extends Component {
     getUserProfileItem() {
         const { role, history, handleShowCreateCaseDialog, classes } = this.props;
         const buttonCreateCase = (
-            <div onClick={() => {
+            <div 
+                onClick={() => {
                 handleSidebarClose();
                 handleShowCreateCaseDialog();
                 }}
@@ -141,7 +142,7 @@ class SidebarContent extends Component {
                         if (element.heroId) {
                             return (
                               <ListItem 
-                                
+                                button
                                 key={i}
                                 onClick={ () => {
                                   handleSetCurrentActiveCase(element._id);
