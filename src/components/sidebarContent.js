@@ -174,7 +174,7 @@ class SidebarContent extends Component {
                             if (!element.heroId) {
                                 return (
                                     <ListItem 
-                                      
+                                      button
                                       key={i}
                                       onClick={ () => {
                                         handleFetchChoosenFreeCase(element._id);
