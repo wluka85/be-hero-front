@@ -147,7 +147,7 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate() {
-    this.refs.isTypingContent.scrollIntoView({block: "end"});
+    this.refs.chatContent.scrollIntoView({block: "end"});
   }
 
 
@@ -237,7 +237,7 @@ class Chat extends React.Component {
         <Paper className={classes.chatPaper} elevation={1}>
           { chatContent }
         </Paper>
-        <div ref='isTypingContent' className={!userIsTyping ? classes.userNotTyping : classes.userTyping}>Is typing...</div>
+        <div className={!userIsTyping ? classes.userNotTyping : classes.userTyping}>Is typing...</div>
         <Paper className={classes.messageTyper} elevation={1}>
         <InputBase onChange={
           (e) => {

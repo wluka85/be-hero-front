@@ -91,7 +91,7 @@ class SidebarContent extends Component {
     getUserProfileItem() {
         const { role, history, handleShowCreateCaseDialog, classes } = this.props;
         const buttonCreateCase = (
-            <div button onClick={() => {
+            <div onClick={() => {
                 handleSidebarClose();
                 handleShowCreateCaseDialog();
                 }}
@@ -109,7 +109,6 @@ class SidebarContent extends Component {
         return (
               <div className={classes.menuButtonsContainer}>
                 <div
-                  button
                   onClick={() => {
                     handleSidebarClose();
                     history.push('/', role);
@@ -142,7 +141,7 @@ class SidebarContent extends Component {
                         if (element.heroId) {
                             return (
                               <ListItem 
-                                button 
+                                
                                 key={i}
                                 onClick={ () => {
                                   handleSetCurrentActiveCase(element._id);
@@ -167,14 +166,14 @@ class SidebarContent extends Component {
         return (
             <React.Fragment>
                 <ListItem>
-                        <ListItemText primary={(<p><b>Your free active cases:</b></p>)} />
+                  {(role === 'needer') ? (<ListItemText primary={(<p><b>Your free active cases:</b></p>)} /> ): <React.Fragment></React.Fragment>}
                     </ListItem>
                     {
                         activeCases.map((element, i) => {
                             if (!element.heroId) {
                                 return (
                                     <ListItem 
-                                      button 
+                                      
                                       key={i}
                                       onClick={ () => {
                                         handleFetchChoosenFreeCase(element._id);
@@ -225,7 +224,7 @@ class SidebarContent extends Component {
                 <div className={classes.signoutContainer}>
                     <Divider/>
                     <div
-                      button
+                      
                       key='logout'
                       onClick={handleLogout}
                       className={classes.menuElement}>
