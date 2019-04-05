@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { handleSignedOut } from '../actions/accountActions'
-import { setActiveCaseCurrentChat } from '../actions/casesActions';
+import { setActiveCaseCurrentChat, setActiveCaseDisplayed } from '../actions/casesActions';
+import { sendActiveCaseDisplayed } from '../actions/socketActions';
 import Divider from '@material-ui/core/Divider';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
@@ -16,10 +17,19 @@ import Button from '@material-ui/core/Button';
 import CaseCreate from './caseCreate';
 import { fetchChoosenFreeCase } from '../actions/casesActions';
 import { handleSidebarClose } from '../actions/sidebarActions';
+import Badge from '@material-ui/core/Badge';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
+  margin: {
+    // margin: theme.spacing.unit,
+    right: 0,
+    top: 5
+  },
+  padding: {
+    padding: `0 ${theme.spacing.unit * 2}px`,
+  },
     drawer: {
       [theme.breakpoints.up('sm')]: {
         width: drawerWidth,
@@ -88,6 +98,16 @@ const styles = theme => ({
 
 class SidebarContent extends Component {
 
+    getDotBadge() {
+      const { classes } = this.props;
+      return (<Badge className={classes.margin} color="secondary" variant="dot"></Badge>);
+    }
+
+    getCountBadge(count) {
+      const { classes } = this.props;
+      return (<Badge className={classes.margin} badgeContent={4} color="secondary"></Badge>)
+    }
+
     getUserProfileItem() {
         const { role, history, handleShowCreateCaseDialog, classes } = this.props;
         const buttonCreateCase = (
@@ -130,7 +150,7 @@ class SidebarContent extends Component {
     }
 
     getActiveCasesList() {
-        const { activeCases, history, role, handleSetCurrentActiveCase, currentCase, classes, handleSidebarClose } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase, handleActiveCaseDisplayed, currentCase, classes, handleSidebarClose } = this.props;
         return (
             <React.Fragment>
                 <ListItem>
@@ -146,10 +166,14 @@ class SidebarContent extends Component {
                                 onClick={ () => {
                                   handleSetCurrentActiveCase(element._id);
                                   handleSidebarClose();
+                                  if (element.caseStatusChanged) handleActiveCaseDisplayed(element._id);
                                   history.push('/' + role + '/chat/' + element._id);
                                 }}
                                 className={(element._id === currentCase._id) ? classes.active : ''}>
-                              <ListItemIcon><TouchIcon /></ListItemIcon>
+                              <ListItemIcon>
+                                <TouchIcon />
+                                { element.caseStatusChanged && role === 'needer' ? this.getDotBadge() : (<div></div>) }
+                              </ListItemIcon>
                               <ListItemText primary={ element.description } />
                               </ListItem>
                             )
@@ -267,6 +291,10 @@ const mapDispatchToProps = (dispatch) => {
         handleShowCreateCaseDialog: () => dispatch({type: 'OPEN_NEW_CASE_DIALOG'}),
         handleFetchChoosenFreeCase: (caseId) => {dispatch(fetchChoosenFreeCase(caseId))},
         handleSidebarClose: () => { dispatch(handleSidebarClose())},
+        handleActiveCaseDisplayed: (caseId) => { 
+          dispatch(sendActiveCaseDisplayed(caseId));
+          dispatch(setActiveCaseDisplayed(caseId));
+        }
     }
 };
 

@@ -35,6 +35,11 @@ export const userTyping = (isTyping, messageReciever, messageSender) => ({
   messageSender: messageSender
 });
 
+export const activeCaseDisplayed = (message) => ({
+  type: 'server/case-displayed',
+  message: message
+})
+
 export const sendUserTyping = (isTyping) => (dispatch, getState) => {
   const reciever = getReciever(getState);
   const sender = getSender(getState);
@@ -88,4 +93,11 @@ export const sendCaseCompleted = (completedCase) => (dispatch, getState) => {
     completedCase: completedCase
   }
   dispatch(caseCompletedSent(content));
+}
+
+export const sendActiveCaseDisplayed = (caseId) => (dispatch, getState) => {
+  const content = {
+    caseId: caseId
+  }
+  dispatch(activeCaseDisplayed(content));
 }

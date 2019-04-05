@@ -1,4 +1,5 @@
 import { getCasesQuery } from "./apiQueries";
+import { element } from "prop-types";
 
 const activeCaseCurrentChatSet = (activeCase) => ({
     type: 'CURRENT_CHAT_CASE',
@@ -8,6 +9,11 @@ const activeCaseCurrentChatSet = (activeCase) => ({
 const currentCaseDescription = (caseDescription) => ({
     type: 'CURRENT_CASE_DESCRIPTION',
     chosenCase: caseDescription
+});
+
+const activeCaseDisplayed = (activeCases) => ({
+    type: 'ACTIVE_CASE_DISPLAYED',
+    activeCases: activeCases
 });
 
 export const setActiveCaseCurrentChat = (activeCaseId) => (dispatch, getState) => {
@@ -49,4 +55,12 @@ export const fetchChoosenFreeCase = (caseId) => (dispatch, getState) => {
         dispatch(currentCaseDescription(data.case[0]));
     })
     .catch(error => console.log(error));
+}
+
+export const setActiveCaseDisplayed = (caseId) => (dispatch, getState) => {
+    const activeCases = getState().casesReducer.activeCases;
+    let activeCase = activeCases.find( element => element._id === caseId);
+    console.log(activeCase);
+    activeCase.caseStatusChanged = false;
+    dispatch(activeCaseDisplayed(activeCases));
 }

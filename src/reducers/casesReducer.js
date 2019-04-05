@@ -41,6 +41,9 @@ const casesReducer = (state=initialState, action) => {
         console.log('chosen case: ', action.chosenCase)
           return {...state, chosenCase: action.chosenCase}
 
+        case 'ACTIVE_CASE_DISPLAYED':
+          return { ...state, activeCases: action.activeCases }
+
         default:
             return state;
     }
