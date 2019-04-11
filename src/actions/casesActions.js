@@ -23,7 +23,6 @@ const activeCaseDialogRead = (activeCases, currentActiveCase) => ({
 });
 
 export const setActiveCaseCurrentChat = (activeCaseId) => (dispatch, getState) => {
-    console.log(activeCaseId)
     const activeCases = getState().casesReducer.activeCases;
     const currentActiveCase = activeCases.find(activeCase => activeCase._id === activeCaseId);
     if (currentActiveCase) {
@@ -64,7 +63,6 @@ export const fetchChoosenFreeCase = (caseId) => (dispatch, getState) => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log('chosen case: ', data)
         dispatch(currentCaseDescription(data.case[0]));
     })
     .catch(error => console.log(error));
@@ -78,7 +76,6 @@ export const setActiveCaseDisplayed = (caseId) => (dispatch, getState) => {
 }
 
 export const setActiveCaseDialogRead = (caseId) => (dispatch, getState) => {
-    console.log('sdasdasdasdasdasdadasdasdasdasdasdassdas')
     let role = getState().accountReducer.role;
     let activeCases = JSON.parse(JSON.stringify(getState().casesReducer.activeCases));
     let currentActiveCase = activeCases.find(activeCase => activeCase._id === caseId);

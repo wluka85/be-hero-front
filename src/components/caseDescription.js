@@ -132,7 +132,6 @@ class CaseDescription extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('object ', state.casesReducer.chosenCase)
     return {
         user: state.accountReducer.user,
         chosenCase: state.casesReducer.chosenCase
