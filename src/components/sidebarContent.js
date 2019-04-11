@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { handleSignedOut } from '../actions/accountActions'
-import { setActiveCaseCurrentChat, setActiveCaseDisplayed } from '../actions/casesActions';
-import { sendActiveCaseDisplayed } from '../actions/socketActions';
+import { setActiveCaseCurrentChat, setActiveCaseDisplayed, setActiveCaseDialogRead } from '../actions/casesActions';
+import { sendActiveCaseDisplayed, sendActiveCaseDialogRead } from '../actions/socketActions';
 import Divider from '@material-ui/core/Divider';
 import ExitIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
@@ -105,7 +105,10 @@ class SidebarContent extends Component {
 
     getCountBadge(count) {
       const { classes } = this.props;
-      return (<Badge className={classes.margin} badgeContent={4} color="secondary"></Badge>)
+      if (count > 0) {
+        return (<Badge className={classes.margin} badgeContent={count} color="secondary"></Badge>)
+      }
+      return (<div></div>);
     }
 
     getUserProfileItem() {
@@ -150,7 +153,7 @@ class SidebarContent extends Component {
     }
 
     getActiveCasesList() {
-        const { activeCases, history, role, handleSetCurrentActiveCase, handleActiveCaseDisplayed, currentCase, classes, handleSidebarClose } = this.props;
+        const { activeCases, history, role, handleSetCurrentActiveCase, handleActiveCaseDisplayed, handleActiveCaseDialogRead, currentCase, classes, handleSidebarClose } = this.props;
         return (
             <React.Fragment>
                 <ListItem>
@@ -159,6 +162,7 @@ class SidebarContent extends Component {
                   {
                       activeCases.map((element, i) => {
                         if (element.heroId) {
+                          const countMessages = role === 'hero' ? element.heroNewMessages : element.neederNewMessages;
                             return (
                               <ListItem 
                                 
@@ -167,12 +171,14 @@ class SidebarContent extends Component {
                                   handleSetCurrentActiveCase(element._id);
                                   handleSidebarClose();
                                   if (element.caseStatusChanged) handleActiveCaseDisplayed(element._id);
+                                  if (countMessages > 0) handleActiveCaseDialogRead(element._id);
                                   history.push('/' + role + '/chat/' + element._id);
                                 }}
                                 className={(element._id === currentCase._id) ? classes.active : ''}>
                               <ListItemIcon>
                                 <TouchIcon />
                                 { element.caseStatusChanged && role === 'needer' ? this.getDotBadge() : (<div></div>) }
+                              { this.getCountBadge(role === 'hero' ? element.heroNewMessages : element.neederNewMessages) }
                               </ListItemIcon>
                               <ListItemText primary={ element.description } />
                               </ListItem>
@@ -271,6 +277,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = (state) => {
     const { name, surname, level, role } = state.accountReducer.user;
+    console.log('map: ', state.casesReducer.activeCases)
     return {
         role: role,
         userName: name + ' ' + surname,
@@ -294,6 +301,10 @@ const mapDispatchToProps = (dispatch) => {
         handleActiveCaseDisplayed: (caseId) => { 
           dispatch(sendActiveCaseDisplayed(caseId));
           dispatch(setActiveCaseDisplayed(caseId));
+        },
+        handleActiveCaseDialogRead: (caseId) => {
+          dispatch(sendActiveCaseDialogRead(caseId));
+          dispatch(setActiveCaseDialogRead(caseId));
         }
     }
 };

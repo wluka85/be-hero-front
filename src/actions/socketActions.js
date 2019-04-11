@@ -38,6 +38,11 @@ export const userTyping = (isTyping, messageReciever, messageSender) => ({
 export const activeCaseDisplayed = (message) => ({
   type: 'server/case-displayed',
   message: message
+});
+
+export const activeCaseRead = (message) => ({
+  type: 'server/case-dialog-read',
+  message: message
 })
 
 export const sendUserTyping = (isTyping) => (dispatch, getState) => {
@@ -100,4 +105,13 @@ export const sendActiveCaseDisplayed = (caseId) => (dispatch, getState) => {
     caseId: caseId
   }
   dispatch(activeCaseDisplayed(content));
+}
+
+export const sendActiveCaseDialogRead = (caseId) => (dispatch, getState) => {
+  const user = getState().accountReducer.user;
+  const content = {
+    caseId: caseId,
+    role: user.role
+  }
+  dispatch(activeCaseRead(content));
 }

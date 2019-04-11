@@ -16,24 +16,37 @@ const activeCaseDisplayed = (activeCases) => ({
     activeCases: activeCases
 });
 
+const activeCaseDialogRead = (activeCases, currentActiveCase) => ({
+    type: 'ACTIVE_CASE_DIALOG_READ',
+    activeCases,
+    currentActiveCase
+});
+
 export const setActiveCaseCurrentChat = (activeCaseId) => (dispatch, getState) => {
-    let role = getState().accountReducer.role;
-    let accessToken = localStorage.getItem('accessToken');
-    fetch(getCasesQuery(role) + activeCaseId, {
-        method: 'GET',
-        headers: {'Accept': 'application/json', 
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken,
-            'params': {
-                caseId: activeCaseId
-            }
-        },
-    })
-    .then(res => res.json())
-    .then(data => {
-        dispatch(activeCaseCurrentChatSet(data.case[0]));
-    })
+    console.log(activeCaseId)
+    const activeCases = getState().casesReducer.activeCases;
+    const currentActiveCase = activeCases.find(activeCase => activeCase._id === activeCaseId);
+    if (currentActiveCase) {
+        dispatch(activeCaseCurrentChatSet(currentActiveCase));
+    } else {
+        let role = getState().accountReducer.role;
+        let accessToken = localStorage.getItem('accessToken');
+        fetch(getCasesQuery(role) + activeCaseId, {
+            method: 'GET',
+            headers: {'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken,
+                'params': {
+                    caseId: activeCaseId
+                }
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            dispatch(activeCaseCurrentChatSet(data.case[0]));
+        })
     .catch(error => console.log(error));
+    }
 }
 
 export const fetchChoosenFreeCase = (caseId) => (dispatch, getState) => {
@@ -60,7 +73,15 @@ export const fetchChoosenFreeCase = (caseId) => (dispatch, getState) => {
 export const setActiveCaseDisplayed = (caseId) => (dispatch, getState) => {
     const activeCases = getState().casesReducer.activeCases;
     let activeCase = activeCases.find( element => element._id === caseId);
-    console.log(activeCase);
     activeCase.caseStatusChanged = false;
     dispatch(activeCaseDisplayed(activeCases));
+}
+
+export const setActiveCaseDialogRead = (caseId) => (dispatch, getState) => {
+    console.log('sdasdasdasdasdasdadasdasdasdasdasdassdas')
+    let role = getState().accountReducer.role;
+    let activeCases = JSON.parse(JSON.stringify(getState().casesReducer.activeCases));
+    let currentActiveCase = activeCases.find(activeCase => activeCase._id === caseId);
+    role === 'hero' ? currentActiveCase.heroNewMessages = 0 : currentActiveCase.neederNewMessages = 0;
+    dispatch(activeCaseDialogRead(activeCases, currentActiveCase));
 }

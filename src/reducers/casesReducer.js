@@ -32,18 +32,31 @@ const casesReducer = (state=initialState, action) => {
           return {...state, openDialog: false}
 
         case 'MESSAGE_RECIEVED':
-            return { ...state, chatDialog: state.chatDialog.concat(action.message) }
-
+          let tempActiveCases = JSON.parse(JSON.stringify(state.activeCases));
+          let indexCase = tempActiveCases.findIndex(element => element._id === action.message.caseId);
+          tempActiveCases[indexCase].dialog.concat(action.message);
+          if (action.role === 'hero') {
+            tempActiveCases[indexCase].heroNewMessages++;
+          } else {
+            tempActiveCases[indexCase].neederNewMessages++;
+          }
+          if (state.currentChatCase._id === action.message.caseId) {
+            return { ...state, currentChatCase: tempActiveCases[indexCase], chatDialog: state.chatDialog.concat(action.message), activeCases: tempActiveCases }
+          } else {
+            return { ...state, activeCases: tempActiveCases };
+          }
         case 'USER_DISCONNECTED': 
           return {...state, users: action.users}
 
         case 'CURRENT_CASE_DESCRIPTION':
-        console.log('chosen case: ', action.chosenCase)
           return {...state, chosenCase: action.chosenCase}
 
         case 'ACTIVE_CASE_DISPLAYED':
           return { ...state, activeCases: action.activeCases }
 
+        case 'ACTIVE_CASE_DIALOG_READ':
+          return { ...state, activeCases: action.activeCases, currentChatCase: action.currentActiveCase }
+          
         default:
             return state;
     }

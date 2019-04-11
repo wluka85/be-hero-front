@@ -9,8 +9,8 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { addMessageToChat } from '../actions/chatActions';
-import { sendChatMessage, sendUserTyping } from '../actions/socketActions';
-import { setActiveCaseCurrentChat } from '../actions/casesActions';
+import { sendChatMessage, sendUserTyping, sendActiveCaseDialogRead } from '../actions/socketActions';
+import { setActiveCaseCurrentChat, setActiveCaseDialogRead } from '../actions/casesActions';
 import moment from 'moment';
 
 const styles = theme => ({
@@ -138,6 +138,7 @@ class Chat extends React.Component {
   componentDidMount() {
     const { handleSetCurrentActiveCase } = this.props;
     const chatId = this.props.match.params.id;
+    console.log('checking chat id: ', chatId);
     handleSetCurrentActiveCase(chatId);
   }
 
@@ -185,9 +186,10 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping, history, role } = this.props;
+    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping, history, role, handleActiveCaseDialogRead } = this.props;
+    const countMessagesToRead = role === 'hero' ? currentActiveCase.heroNewMessages : currentActiveCase.neederNewMessages;
     const chatContent = (
-      <div ref='chatContent'>
+      <div ref='chatContent' onWheel={ () => {if (countMessagesToRead > 0) handleActiveCaseDialogRead(currentActiveCase._id) }}>
         {chatDialog.length ? chatDialog.map((element, key) => {
           return (
             <div className={user.name === element.author ? classes.firstPersonDiv : classes.secondPersonDiv} key={key}>
@@ -239,11 +241,15 @@ class Chat extends React.Component {
         </Paper>
         <div className={!userIsTyping ? classes.userNotTyping : classes.userTyping}>Is typing...</div>
         <Paper className={classes.messageTyper} elevation={1}>
-        <InputBase onChange={
-          (e) => {
-            this.setState({ messageInput: e.target.value })
-            }
-          } 
+        <InputBase
+          onClick={() => { if (countMessagesToRead > 0) handleActiveCaseDialogRead(currentActiveCase._id) }}
+          onChange={
+            (e) => {
+              this.setState({ messageInput: e.target.value });
+              
+              if (countMessagesToRead > 0) handleActiveCaseDialogRead(currentActiveCase._id);
+              }
+            } 
           
           onKeyDown = {(e) => {
             if (e.keyCode === 13 && this.state.messageInput) {
@@ -300,7 +306,11 @@ const mapDispatchToProps = (dispatch) => {
     sendIsTyping: (isTyping) => {
       dispatch(sendUserTyping(isTyping));
     },
-    handleSetCurrentActiveCase: (id) => { dispatch(setActiveCaseCurrentChat(id)) }
+    handleSetCurrentActiveCase: (id) => { dispatch(setActiveCaseCurrentChat(id)) },
+    handleActiveCaseDialogRead: (caseId) => {
+      dispatch(sendActiveCaseDialogRead(caseId));
+      dispatch(setActiveCaseDialogRead(caseId));
+    }
   }
 }
 
