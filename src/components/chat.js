@@ -128,7 +128,7 @@ const styles = theme => ({
   notification: {
     lineHeight: '500%',
     color: '#757575',
-    fontSize: '3em',
+    fontSize: '1.5em',
     fontWeight: 'bold'
   }
 });
