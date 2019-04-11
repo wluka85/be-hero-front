@@ -28,11 +28,12 @@ export const caseCompletedSent = (message) => ({
   message: message
 });
 
-export const userTyping = (isTyping, messageReciever, messageSender) => ({
+export const userTyping = (isTyping, messageReciever, messageSender, caseId) => ({
   type: 'server/user-is-typing',
   isTyping: isTyping,
   messageReciever: messageReciever,
-  messageSender: messageSender
+  messageSender: messageSender,
+  caseId: caseId
 });
 
 export const activeCaseDisplayed = (message) => ({
@@ -48,7 +49,9 @@ export const activeCaseRead = (message) => ({
 export const sendUserTyping = (isTyping) => (dispatch, getState) => {
   const reciever = getReciever(getState);
   const sender = getSender(getState);
-  dispatch(userTyping(isTyping, reciever, sender));
+  const caseId = getState().casesReducer.currentChatCase._id;
+  
+  dispatch(userTyping(isTyping, reciever, sender, caseId));
 }
 
 export const sendChatMessage = (message) => (dispatch, getState) => {

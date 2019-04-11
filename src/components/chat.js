@@ -186,7 +186,7 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, userIsTyping, history, role, handleActiveCaseDialogRead } = this.props;
+    const { classes, currentActiveCase, chatDialog, sendMessage, user, sendIsTyping, typingCaseId, userIsTyping, history, role, handleActiveCaseDialogRead } = this.props;
     const countMessagesToRead = role === 'hero' ? currentActiveCase.heroNewMessages : currentActiveCase.neederNewMessages;
     const chatContent = (
       <div ref='chatContent' onWheel={ () => {if (countMessagesToRead > 0) handleActiveCaseDialogRead(currentActiveCase._id) }}>
@@ -239,7 +239,7 @@ class Chat extends React.Component {
         <Paper className={classes.chatPaper} elevation={1}>
           { chatContent }
         </Paper>
-        <div className={!userIsTyping ? classes.userNotTyping : classes.userTyping}>Is typing...</div>
+        <div className={userIsTyping && typingCaseId === currentActiveCase._id ? classes.userTyping : classes.userNotTyping}>Is typing...</div>
         <Paper className={classes.messageTyper} elevation={1}>
         <InputBase
           onClick={() => { if (countMessagesToRead > 0) handleActiveCaseDialogRead(currentActiveCase._id) }}
@@ -293,6 +293,7 @@ const mapStateToProps = (state) => {
         chatDialog: state.casesReducer.chatDialog,
         user: state.accountReducer.user,
         userIsTyping: state.messageReducer.userIsTyping,
+        typingCaseId: state.messageReducer.typingCaseId,
         sender: state.messageReducer.sender
     }
 }
